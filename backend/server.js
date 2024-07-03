@@ -34,4 +34,19 @@ app.post("/api/v1/posts/create",async(req,res)=>{
     }
 })
 
+//all posts display 
+
+app.get("/api/v1/posts",async(req,res)=>{
+    try {
+        const posts = await Post.find();
+        res.json({
+            status:"success",
+            message:"posts fetched successfully",
+            posts,
+        })
+    } catch (error) {
+        res.json(error);
+        
+    }
+})
 app.listen(PORT,console.log(`Server is up and running at : ${PORT}`))
