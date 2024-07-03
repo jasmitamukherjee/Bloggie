@@ -31,3 +31,8 @@ export const updatePostAPI = async (postData)=>{
     });
     return response;
 }
+//delete 
+export const deletePostAPI = async(postId)=>{
+   const posts = await axios.delete(`${BASE_URL}/${postId}`)
+   return posts.data;
+}
