@@ -21,3 +21,13 @@ export const fetchPost = async(postId)=>{
    const posts = await axios.get(`${BASE_URL}/${postId}`)
    return posts.data;
 }
+
+//update post 
+export const updatePostAPI = async (postData)=>{
+   console.log(postData)
+    const response =await axios.put(`${BASE_URL}/${postData?.postId}`,{
+       title:postData.title,
+       description:postData.description
+    });
+    return response;
+}
