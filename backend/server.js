@@ -49,4 +49,44 @@ app.get("/api/v1/posts",async(req,res)=>{
         
     }
 })
+
+//update posts 
+app.put("/api/v1/posts/:postId",async(req,res)=>{
+    try {
+        const postId = req.params.postId;
+        const postFound= await Post.findById(postId);
+        if(!postFound){
+            throw new Error("Post not found")
+        }
+        const postUpdated= await Post.findByIdAndUpdate(postId,{title:req.body.title,description:req.body.description},{
+            new:true
+        })
+        res.json({
+            status:"success",
+            message:"post updated successfully",
+            postUpdated
+        })
+    } catch (error) {
+        throw new Error(error)
+        
+    }
+})
+
+//get post
+app.get("/api/v1/posts/:postId",async(req,res)=>{
+    try {
+        const postId = req.params.postId;
+        const postFound = await Post.findById(postId);
+        res.json({
+            status:"success",
+            message:"post fetched successfully",
+            postFound
+        })
+        
+    } catch (error) {
+        throw new Error(error)
+        
+    }
+})
+
 app.listen(PORT,console.log(`Server is up and running at : ${PORT}`))
