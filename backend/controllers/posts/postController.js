@@ -7,10 +7,7 @@ const postController= {
     
         //get payload
         const {description}=req.body;
-        // const postFound= await Post.findOne({title:title})
-        // if(postFound){
-        //     throw new Error("Post already exists!")
-        // }
+       
         const postCreated=await Post.create({description});
         res.json({
             status:"success",

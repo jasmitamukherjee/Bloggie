@@ -3,7 +3,7 @@ import PublicNavbar from './components/Navbar/PublicNavbar';
 import CreatePost from './components/Posts/CreatePost'
 // import PostDetails from './components/Posts/PostDetails';
 import UpdatePost from './components/Posts/UpdatePost';
-import PostsList from './components/PostsList'
+import PostsList from './components/Posts/PostsList'
 import {BrowserRouter,Route,Routes} from "react-router-dom";
 function App() {
 
