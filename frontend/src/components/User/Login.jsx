@@ -33,7 +33,7 @@ const Login = () => {
         .mutateAsync(values)
         .then(() => {
           // redirect
-          navigate("/dashboard");
+          navigate("/profile");
         })
         .catch((err) => console.log(err));
     },
