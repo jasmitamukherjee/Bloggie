@@ -89,6 +89,28 @@ googleAuthCallback: asyncHandler(async (req, res, next) => {
     )(req, res, next);
   }),
 
+  //check user auth
+  checkAuthenticated : asyncHandler(async(req,res)=>{
+    const token = req.cookies["token"];
+    if(!token){
+        return res.status(401).json({isAuthenticated:false})
+    }
+try {
+    const decoded = jwt.verify(token,process.env.JWT_SECRET);
+    //find user 
+    const user=await User.findById(decoded.id);
+if(!user){
+    return res.status(401).json({isAuthenticated:false})
+
+}    else{
+    return res.status(200).json({isAuthenticated:true,_id:user?._id,username:user?.username,profilePicture:user?.profilePicture})
+}
+} catch (error) {
+    return res.status(401).json({isAuthenticated:false,error})
+
+}
+  })
+
 }
 
 module.exports = userController;

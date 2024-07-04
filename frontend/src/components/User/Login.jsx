@@ -18,8 +18,8 @@ const Login = () => {
   const formik = useFormik({
     // initial data
     initialValues: {
-      username: "jasmita",
-      password: "12345",
+      username: "",
+      password: "",
     },
     // validation
     validationSchema: Yup.object({
@@ -33,7 +33,7 @@ const Login = () => {
         .mutateAsync(values)
         .then(() => {
           // redirect
-          // navigate("/dashboard");
+          navigate("/dashboard");
         })
         .catch((err) => console.log(err));
     },
@@ -127,7 +127,7 @@ const Login = () => {
             </button>
 
             {/* login with google */}
-            <a
+            {/* <a
               href="http://localhost:5000/api/v1/users/auth/google"
               className="h-14 inline-flex items-center justify-center gap-2 py-4 px-6 rounded-full bg-white w-full text-center border border-gray-100 shadow hover:bg-gray-50 focus:ring focus:ring-orange-200 transition duration-200"
               type="submit"
@@ -161,7 +161,7 @@ const Login = () => {
               <span className="font-bold font-heading">
                 Sign in with Google
               </span>
-            </a>
+            </a> */}
             {/* forgot password link */}
             <Link className="mt-10 text-indigo-500" to="/forgot-password">
               Forgot Password?

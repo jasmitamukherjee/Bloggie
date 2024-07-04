@@ -4,6 +4,8 @@ const cors = require("cors");
 const passport = require("./utils/passport-config");
 
 const express=require("express");
+const cookieParser=require("cookie-parser");
+
 const Post= require("./models/Post/Post");
 const connectDB = require("./utils/connectDB");
 const postRouter = require("./routers/post/postRouter");
@@ -23,6 +25,7 @@ app.use(cors(corsOptions))
 
 //passport middleware 
 app.use(passport.initialize());
+app.use(cookieParser());
 //route handlers
 app.use("/",postRouter)
 app.use("/",usersRouter)

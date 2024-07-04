@@ -9,32 +9,32 @@ const GoogleStrategy = require("passport-google-oauth20");
 
 
 passport.use(
-    new LocalStrategy({
-usernameField:"username"
-    },
-async (username,password,done)=>{
-try {
-    const user = await User.findOne({username});
-    if(!user){
-        return done(null,false,{message:"No user with that email found"})
-    }
-const match = await bcrypt.compare(password,user.password)
-if(match){
-    return done(null,user)
-}else{
-    return done(null,false,{message:"Invalid credentials"})
-}
-
-} catch (error) {
-    return done(error)
-    
-}
-})
-);
-
-
-//JWT-Options
-const options = {
+    new LocalStrategy(
+      {
+        usernameField: "username", //username/email
+      },
+      async (username, password, done) => {
+        try {
+          const user = await User.findOne({ username });
+          if (!user) {
+            return done(null, false, { message: "Invalid login details" });
+          }
+          //verify the password
+          const match = await bcrypt.compare(password, user.password);
+          if (match) {
+            return done(null, user);
+          } else {
+            return done(null, false, { message: "Invalid login details" });
+          }
+        } catch (error) {
+          return done(error);
+        }
+      }
+    )
+  );
+  
+  //JWT-Options
+  const options = {
     jwtFromRequest: ExtractJWT.fromExtractors([
       (req) => {
         let token = null;
