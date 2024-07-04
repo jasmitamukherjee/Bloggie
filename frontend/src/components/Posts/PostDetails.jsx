@@ -63,8 +63,8 @@ const PostDetails = () => {
     <div className="container mx-auto p-4">
       <div className="bg-white rounded-lg shadow-lg p-5">
         <img
-          src="https://futurevisioncomputers.com/wp-content/uploads/2024/02/react.js-img-1.png"
-         //  alt={data?.postFound?.description}
+          src={data?.postFound?.image?.path}
+          alt={data?.postFound?.description}
           className="w-full h-full object-cover rounded-lg mb-4"
         />
         {/* Show messages */}

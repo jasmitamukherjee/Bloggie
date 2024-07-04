@@ -2,11 +2,17 @@ import React, { useState } from 'react'
 import {useFormik} from "formik";
 import * as Yup from "yup";
 import "react-quill/dist/quill.snow.css";
+import { FaTimesCircle } from "react-icons/fa";
+
 import {useMutation} from "@tanstack/react-query"
 import { createPostAPI } from '../../APIServices/posts/postsAPI';
 import ReactQuill from "react-quill";
 const CreatePost = () => {
   const [description,setDescription] = useState("")
+  //file upload 
+  const [imageError,setImageError] = useState("");
+  const [imagePreview,setImagePreview] = useState(null);
+
   //post mutation 
   const postMutation = useMutation({
     mutationKey:['create-post'],
@@ -15,25 +21,51 @@ const CreatePost = () => {
   const formik= useFormik({
     initialValues:{
      
-      description:""
+      description:"",
+      image:""
     },
     validationSchema:Yup.object({
       description:Yup.string().required("Description is required"),
+      image:Yup.string().required("Image is required"),
+
 
     }),
     onSubmit:(values)=>{
-      const postData={
-        description:values.description
-      }
-      postMutation.mutate(postData);
+     //form data
+     const formData = new FormData();
+     formData.append("description", description);
+     formData.append("image", values.image);
+    //  formData.append("category", values.category);
+      postMutation.mutate(formData);
     }
   });
+
+ //file upload logics 
+const handleFileChange=(event)=>{
+  const file = event.currentTarget.files[0]
+//limit size 
+if(file.size> 1048576){
+  setImageError("File exceeded 1 MB");
+  return;
+}
+if(!["image/jpeg","image/jpg","image/png"].includes(file.type)){
+setImageError("Invalid file type")
+}
+formik.setFieldValue("image",file)
+setImagePreview(URL.createObjectURL(file))
+}
 //  get loading state
-const isLoading = postMutation.isLoading
+const isLoading = postMutation.isPending
 const isError = postMutation.isError
 const isSuccess =postMutation.isSuccess
 const error = postMutation.error;
 const errorMsg =postMutation?.error?.response?.data?.message;
+
+//remove image 
+const removeImage = () => {
+  formik.setFieldValue("image", null);
+  setImagePreview(null);
+};
 
 return (
   
@@ -79,6 +111,7 @@ return (
             type="file"
             name="image"
             accept='image/*'
+            onChange={handleFileChange}
             className='hidden'
             />
             <label 
@@ -88,6 +121,27 @@ return (
             </label>
 
           </div>
+          {formik.touched.image && formik.errors.image && (
+              <p className="text-sm text-red-600">{formik.errors.image}</p>
+            )}
+
+            {/* error message */}
+            {imageError && <p className="text-sm text-red-600">{imageError}</p>}
+            {imagePreview && (
+              <div className="mt-2 relative">
+                <img
+                  src={imagePreview}
+                  alt="Preview"
+                  className="mt-2 h-24 w-24 object-cover rounded-full"
+                />
+                <button
+                  onClick={removeImage}
+                  className="absolute right-0 top-0 transform translate-x-1/2 -translate-y-1/2 bg-white rounded-full p-1"
+                >
+                  <FaTimesCircle className="text-red-500" />
+                </button>
+              </div>
+            )}
         </div>
         <button 
         type='submit'

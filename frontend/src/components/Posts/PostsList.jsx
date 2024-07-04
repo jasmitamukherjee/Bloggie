@@ -21,7 +21,7 @@ const PostsList = () => {
             refetch();
         }).catch((e) => console.log(e));
     };
-
+// console.log(data)
     return (
         <div className="min-h-screen">
             {isLoading && <p>Loading...</p>}
@@ -44,8 +44,8 @@ const PostsList = () => {
                                             <div className='absolute bottom-0 right-0 z-10'></div>
                                             <img
                                                 className='absolute inset-0 w-full h-full object-cover rounded-2xl'
-                                                src="https://cdn.pixabay.com/photo/2024/05/26/10/15/bird-8788491_1280.jpg"
-                                                alt
+                                                src={post?.image?.path}
+                                                alt={post?.image?.description}
                                             />
                                         </div>
                                         <div className="rendered-html-content mb-2"
