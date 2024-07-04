@@ -5,6 +5,9 @@ export const createPostAPI = async (postData)=>{
     console.log(postData)
      const response =await axios.post(`${BASE_URL}/create`,
         postData,
+        {
+         withCredentials:true
+        }
      );
      return response;
 }
@@ -27,11 +30,16 @@ export const updatePostAPI = async (postData)=>{
     const response =await axios.put(`${BASE_URL}/${postData?.postId}`,{
        title:postData.title,
        description:postData.description
-    });
+    },
+   {
+      withCredentials:true
+   });
     return response;
 }
 //delete 
 export const deletePostAPI = async(postId)=>{
-   const posts = await axios.delete(`${BASE_URL}/${postId}`)
+   const posts = await axios.delete(`${BASE_URL}/${postId}`,{
+      withCredentials:true
+   })
    return posts.data;
 }

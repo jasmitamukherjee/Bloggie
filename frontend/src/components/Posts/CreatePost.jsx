@@ -62,7 +62,6 @@ const isSuccess =postMutation.isSuccess
 const errorMsg =postMutation?.error?.response?.data?.message;
 
 //show messages to user
-if(isError) return <AlertMessage type="error" message={errorMsg}/>;
 
 //remove image 
 const removeImage = () => {
@@ -79,6 +78,7 @@ return (
       </h2>
       {isLoading && <AlertMessage type="loading" message="Loading, please wait!"/>}
       {isSuccess && <AlertMessage type="success" message="Post created successfully!"/>}
+      {isError && <AlertMessage type="error" message="We encountered an error,please wait!"/>}
 
       <form onSubmit={formik.handleSubmit} className='space-y-6'>
         <div className='mb-10 '>

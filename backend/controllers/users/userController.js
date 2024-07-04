@@ -46,7 +46,7 @@ login:asyncHandler(async(req,res,next)=>{
             sameSite:"strict",
             maxAge : 24*60*60*1000
         })
-        console.log(token)
+        // console.log(token)
         res.json({
             status:"success",
             message:"login succesfull",
@@ -109,6 +109,11 @@ if(!user){
     return res.status(401).json({isAuthenticated:false,error})
 
 }
+  }),
+  //log out 
+  logout:asyncHandler(async(req,res)=>{
+    res.cookie("token","",{maxAge:1});
+    res.status(200).json({message:"logged out successfully"})
   })
 
 }
