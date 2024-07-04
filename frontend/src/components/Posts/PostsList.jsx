@@ -3,6 +3,8 @@ import React from 'react'
 import { deletePostAPI, fetchAllPosts } from '../../APIServices/posts/postsAPI'
 import { Link } from 'react-router-dom'
 import {useMutation} from "@tanstack/react-query"
+import "./postCss.css";
+
 const PostsList = () => {
     const {isError, isLoading, data, error, refetch} = useQuery({
         queryKey: ['lists-posts'],
@@ -40,11 +42,11 @@ const PostsList = () => {
                                         <div className='relative' style={{height: 200}}>
                                             <div className='absolute top-0 left-0 z-10'></div>
                                             <div className='absolute bottom-0 right-0 z-10'></div>
-                                            {/* <img
+                                            <img
                                                 className='absolute inset-0 w-full h-full object-cover rounded-2xl'
-                                                src={post?.img?.path}
+                                                src="https://cdn.pixabay.com/photo/2024/05/26/10/15/bird-8788491_1280.jpg"
                                                 alt
-                                            /> */}
+                                            />
                                         </div>
                                         <div className="rendered-html-content mb-2"
                                              dangerouslySetInnerHTML={{__html: post?.description}}
