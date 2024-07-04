@@ -6,6 +6,8 @@ import {useMutation} from "@tanstack/react-query"
 import "./postCss.css";
 import NoDataFound from '../Alert/NoDataFound'
 import AlertMessage from '../Alert/AlertMessage'
+import { fetchCategoriesAPI } from '../../APIServices/category/categoryAPI'
+import PostCategory from '../Category/PostCategory'
 
 const PostsList = () => {
     const {isError, isLoading, data, error, refetch} = useQuery({
@@ -17,6 +19,13 @@ const PostsList = () => {
         mutationKey: ['delete-post'],
         mutationFn: deletePostAPI
     });
+
+// Fetch categories
+const { data : categories} = useQuery({
+    queryKey: ["category-lists"],
+    queryFn: fetchCategoriesAPI,
+  });
+
     // delete handler 
     // const deleteHandler = async (postId) => {
     //     postMutation.mutateAsync(postId).then(() => {
@@ -42,6 +51,12 @@ if(data?.post?.length <= 0) return <NoDataFound text="No Posts Found!"/>
                     <h2 className='text-4xl font-bold font-heading mb-10'>
                         Latest articles
                     </h2>
+                     {/* Post category */}
+        <PostCategory
+          categories={categories}
+        //   onCategorySelect={handleCategoryFilter}
+        //   onClearFilters={clearFilters}
+        />
                     <div className='flex flex-wrap mb-32 -mx-4'>
                         {data?.posts?.map((post) => (
                             <div key={post._id} className='w-full md:w-1/2 lg:w-1/3 p-4'>
@@ -68,7 +83,7 @@ if(data?.post?.length <= 0) return <NoDataFound text="No Posts Found!"/>
                                                 <circle cx={2} cy={2} r={2} fill="#b8b8b8"/>
                                             </svg>
                                             <div className='py-1 px-2 rounded-md border border-gray-100 font-medium text-gray-700 inline-block'>
-                                                {/* {post?.category?.categoryName} */}
+                                                {post?.category?.categoryName}
                                             </div>
                                         </div>
                                     </div>
