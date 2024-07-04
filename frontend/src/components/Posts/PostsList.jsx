@@ -4,6 +4,8 @@ import { deletePostAPI, fetchAllPosts } from '../../APIServices/posts/postsAPI'
 import { Link } from 'react-router-dom'
 import {useMutation} from "@tanstack/react-query"
 import "./postCss.css";
+import NoDataFound from '../Alert/NoDataFound'
+import AlertMessage from '../Alert/AlertMessage'
 
 const PostsList = () => {
     const {isError, isLoading, data, error, refetch} = useQuery({
@@ -16,12 +18,18 @@ const PostsList = () => {
         mutationFn: deletePostAPI
     });
     // delete handler 
-    const deleteHandler = async (postId) => {
-        postMutation.mutateAsync(postId).then(() => {
-            refetch();
-        }).catch((e) => console.log(e));
-    };
-// console.log(data)
+    // const deleteHandler = async (postId) => {
+    //     postMutation.mutateAsync(postId).then(() => {
+    //         refetch();
+    //     }).catch((e) => console.log(e));
+    // };
+
+//show messages to user
+if(isLoading) return <AlertMessage type="loading" message="Loading posts, please wait!"/>;
+if(isError) return <AlertMessage type="error" message="Some error has occured, please visit us later!"/>;
+//no post found
+if(data?.post?.length <= 0) return <NoDataFound text="No Posts Found!"/>
+
     return (
         <div className="min-h-screen">
             {isLoading && <p>Loading...</p>}

@@ -7,6 +7,7 @@ import { FaTimesCircle } from "react-icons/fa";
 import {useMutation} from "@tanstack/react-query"
 import { createPostAPI } from '../../APIServices/posts/postsAPI';
 import ReactQuill from "react-quill";
+import AlertMessage from '../Alert/AlertMessage';
 const CreatePost = () => {
   const [description,setDescription] = useState("")
   //file upload 
@@ -58,8 +59,10 @@ setImagePreview(URL.createObjectURL(file))
 const isLoading = postMutation.isPending
 const isError = postMutation.isError
 const isSuccess =postMutation.isSuccess
-const error = postMutation.error;
 const errorMsg =postMutation?.error?.response?.data?.message;
+
+//show messages to user
+if(isError) return <AlertMessage type="error" message={errorMsg}/>;
 
 //remove image 
 const removeImage = () => {
@@ -74,8 +77,11 @@ return (
       <h2 className='text-2xl font-bold text-center text-gray-800 mb-8'>
         Add New Post
       </h2>
+      {isLoading && <AlertMessage type="loading" message="Loading, please wait!"/>}
+      {isSuccess && <AlertMessage type="success" message="Post created successfully!"/>}
+
       <form onSubmit={formik.handleSubmit} className='space-y-6'>
-        <div>
+        <div className='mb-10 '>
           <label
           htmlFor='description'
           className='block text-sm font-medium text-gray-700'>
@@ -87,6 +93,7 @@ return (
         setDescription(value)
         formik.setFieldValue('description',value)
        }}
+       className='h-40'
        />
         {formik.touched.description && formik.errors.description      
         && (<span style={{color:"red"}}>
