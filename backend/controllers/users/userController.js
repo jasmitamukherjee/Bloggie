@@ -56,7 +56,38 @@ login:asyncHandler(async(req,res,next)=>{
         })
     })(req,res,next);
 }),
-//profile
+//google auth 
+googleAuth: passport.authenticate("google", { scope: ["profile"] }),
+//google auth callback
+googleAuthCallback: asyncHandler(async (req, res, next) => {
+    passport.authenticate(
+      "google",
+      {
+        failureRedirect: "/login",
+        session: false,
+      },
+      (err, user, info) => {
+        if (err) return next(err);
+        if (!user) {
+          return res.redirect("http://localhost:5173/google-login-error");
+        }
+        //generate the token
+
+        const token = jwt.sign({ id: user?._id }, process.env.JWT_SECRET, {
+          expiresIn: "3d",
+        });
+        //set the token into the cooke
+        res.cookie("token", token, {
+          httpOnly: true,
+          secure: false,
+          sameSite: "strict",
+          maxAge: 24 * 60 * 60 * 1000, //1 day:
+        });
+        //redirect the user dashboard
+        res.redirect("http://localhost:5173/dashboard");
+      }
+    )(req, res, next);
+  }),
 
 }
 

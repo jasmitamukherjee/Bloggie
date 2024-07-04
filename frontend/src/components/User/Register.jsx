@@ -1,11 +1,13 @@
 import React, { useEffect } from "react";
 import { useFormik } from "formik";
 import * as Yup from "yup";
-import { Link, useNavigate } from "react-router-dom";
+import { Link ,useNavigate} from "react-router-dom";
 import { useMutation } from "@tanstack/react-query";
 import { registerAPI } from "../../APIServices/users/usersAPI";
 import axios from "axios";
+import AlertMessage from "../Alert/AlertMessage";
 const Register = () => {
+    const navigate=useNavigate();
      //user mutation 
   const userMutation = useMutation({
     mutationKey:['user-registration'],
@@ -28,17 +30,18 @@ const Register = () => {
     
     
         }),
-        onSubmit: async (values) => {
-            try {
-              const response = await axios.post('http://localhost:5000/api/v1/users/register', values);
-              console.log('Registration successful:', response.data);
-              // Handle success, redirect, show message, etc.
-            } catch (error) {
-              console.error('Registration error:', error);
-              // Handle error, show error message, etc.
-            }
+        onSubmit: (values) => {
+            console.log(values);
+            userMutation
+              .mutateAsync(values)
+              .then(() => {
+                // redirect
+                navigate("/login");
+              })
+              .catch((err) => console.log(err));
           },
-        });
+      
+      });
       
  
   return (
@@ -55,6 +58,10 @@ const Register = () => {
               <span className="font-bold font-heading">Login</span>
             </Link>
             {/* show message */}
+            {userMutation.isPending && <AlertMessage type="loading" message="Loading, please wait!"/>}
+      {userMutation.isSuccess && <AlertMessage type="success" message="You have been registered successfully!"/>}
+      {userMutation.isError && <AlertMessage type="error" message={userMutation.error.response.data.message}/>}
+
 
             <label
               className="block text-sm font-medium mb-2"
