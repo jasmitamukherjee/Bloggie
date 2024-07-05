@@ -15,6 +15,7 @@ const planRouter = require("./routers/plan/planRouter");
 const stripePaymentRouter = require("./routers/stripePayment/stripePaymentRouter");
 const calculateEarnings = require("./utils/calculateEarnings");
 const earningsRouter = require("./routers/earnings/earningsRouter");
+const notificationRouter = require("./routers/notification/notificationRouter");
 
 connectDB();
 cron.schedule("59 23 * * *",async()=>{
@@ -50,6 +51,8 @@ app.use("/",categoriesRouter)
 app.use("/",planRouter)
 app.use("/",stripePaymentRouter)
 app.use("/",earningsRouter)
+app.use("/",notificationRouter)
+
 
 
 

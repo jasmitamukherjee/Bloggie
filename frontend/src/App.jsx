@@ -25,6 +25,7 @@ import PaymentSuccess from './components/Plans/PaymentSuccess';
 import PayingFreePlan from './components/Plans/PayingFreePlan';
 import AccountVerifiedComponent from './components/User/AccountVerification';
 import Rankings from './components/User/Rankings';
+import Notifications from './components/Notification/Notifications';
 
 function App() {
   const {isError, isLoading, data, error, refetch} = useQuery({
@@ -68,6 +69,11 @@ const {userAuth}=useSelector((state)=>state.auth)
         <Route element={<AuthRoute>
           <CreatePlan/>
         </AuthRoute>} path="create-plan"/>
+
+        
+        <Route element={<AuthRoute>
+          <Notifications/>
+        </AuthRoute>} path="notifications"/>
         
         <Route element={<AuthRoute>
           <AccountVerifiedComponent/>
