@@ -37,21 +37,24 @@ const postSchema=mongoose.Schema({
         ref:"Category",
         required:true,
     },
-    likes:{
+    likes:[{
         type:mongoose.Schema.Types.ObjectId,
         ref:"User",
 
-    },
-    dislikes:{
+    }],
+    dislikes:[{
         type:mongoose.Schema.Types.ObjectId,
         ref:"User",
 
-    },
-    viewers:{
+    }],
+    viewers:[{
         type:mongoose.Schema.Types.ObjectId,
         ref:"User",
 
-    },
+    }],
+    viewsCount: { type: Number, default: 0 }
+    ,
+
     comments:{
         type:mongoose.Schema.Types.ObjectId,
         ref:"Comment",

@@ -3,6 +3,8 @@ const bcrypt = require("bcryptjs")
 const passport = require("passport")
 const jwt=require("jsonwebtoken")
 const User = require("../../models/User/User");
+const crypto=require("crypto");
+const sendAccVerificationEmail = require("../../utils/sendAccVerificationEmail");
 
 const userController={
 
@@ -119,7 +121,97 @@ if(!user){
   profile:asyncHandler(async(req,res)=>{
     const user= await User.findById(req.user).populate("posts").select("-password -passwordResetToken -accountVerificationToken -accountVerificationExpires -passwordResetExpires")
     res.json({user})
-  })
+  }),
+  followUser:asyncHandler(async(req,res)=>{
+    const userId=req.user
+
+    const followId= req.params.followId
+    await User.findByIdAndUpdate(userId,{
+      $addToSet:{following:followId}
+
+    },{new:true})
+    await User.findByIdAndUpdate(followId,{
+      $addToSet:{followers:userId}
+
+    },{new:true})
+    res.json({
+      messgage:"user followed"
+    })
+  }),
+  unFollowUser: asyncHandler(async (req, res) => {
+    //1. Find the user who wants to follow user (req.user)
+    const userId = req.user;
+    //2. Get the user to follow (req.params)
+    const unfollowId = req.params.unfollowId;
+    //Find the users
+    const user = await User.findById(userId);
+    const unfollowUser = await User.findById(unfollowId);
+    if (!user || !unfollowUser) {
+      throw new Error("User not found");
+    }
+    user.following.pull(unfollowId);
+    unfollowUser.followers.pull(userId);
+    //save the users
+    await user.save();
+    await unfollowUser.save();
+    res.json({
+      message: "User unfollowed",
+    });
+  }),
+
+  //! Verify email acount (token)
+  verifyEmailAccount: asyncHandler(async (req, res) => {
+    //find the login user
+    const user = await User.findById(req.user);
+    if (!user) {
+      throw new Error("User not found please login");
+    }
+    // check if user email exists
+    if (!user?.email) {
+      throw new Error("Email not found");
+    }
+
+    if(!user?.email){
+      throw new Error("No email found!")
+    }
+    //use the method from the model
+    const token = await user.generateAccVerificationToken();
+    
+    // //resave the user
+    await user.save();
+    // //send the email
+    sendAccVerificationEmail(user?.email, token);
+    res.json({
+token,
+      message: `Account verification email sent to ${user?.email} token expires in 10 minutes`,
+    });
+  }),
+  //  //! Verify email acount
+   verifyEmailAcc: asyncHandler(async (req, res) => {
+    //Get the token
+    const { verifyToken } = req.params;
+    //Convert the token to actual token that has been saved in our db
+    const cryptoToken = crypto
+      .createHash("sha256")
+      .update(verifyToken)
+      .digest("hex");
+    //Find the user
+    const userFound = await User.findOne({
+      accountVerificationToken: cryptoToken,
+      accountVerificationExpires: { $gt: Date.now() },
+    });
+    if (!userFound) {
+      throw new Error("Account verification expires");
+    }
+
+    //Update the user field
+    userFound.isEmailVerified = true;
+    userFound.accountVerificationToken = null;
+    userFound.accountVerificationExpires = null;
+    //resave the user
+    await userFound.save();
+    res.json({ message: "Account successfully verified" });
+  }),
 
 }
 

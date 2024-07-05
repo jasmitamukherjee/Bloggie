@@ -9,9 +9,12 @@ import {
   FaComment,
 } from "react-icons/fa";
 import { useParams } from "react-router-dom";
+import {RiUserUnfollowFill,RiUserFollowLine} from "react-icons/ri"
 import * as Yup from "yup";
 import {
+  dislikePostAPI,
   fetchPost,
+  likePostAPI,
 } from "../../APIServices/posts/postsAPI";
 // import { RiUserUnfollowFill, RiUserFollowLine } from "react-icons/ri";
 // import {
@@ -21,6 +24,7 @@ import {
 // } from "../../APIServices/users/usersAPI";
 // import { createCommentAPI } from "../../APIServices/comments/commentsAPI";
 import { useFormik } from "formik";
+import { followUserAPI, unfollowUserAPI, userProfileAPI } from "../../APIServices/users/usersAPI";
 const PostDetails = () => {
   const [comment, setComment] = useState("");
   // !Get the post id
@@ -35,6 +39,11 @@ const PostDetails = () => {
   } = useQuery({
     queryKey: ["post-details"],
     queryFn: () => fetchPost(postId),
+  });
+//profile
+  const {data : profileData,refetch:refetchProfile} = useQuery({
+    queryKey: ["profile-details"],
+    queryFn: () => userProfileAPI(),
   });
   const formik = useFormik({
    // initial data
@@ -59,6 +68,61 @@ const PostDetails = () => {
        .catch((e) => console.log(e));
    },
  });
+
+ const followUserMutation = useMutation({
+  mutationKey:["follow"],
+  mutationFn:followUserAPI
+})
+const unfollowUserMutation = useMutation({
+  mutationKey:["unfollow"],
+  mutationFn:unfollowUserAPI
+})
+const userId=profileData?.user?._id
+ const targetId= data?.postFound?.author;
+
+ const likesMutation = useMutation({
+  mutationKey:["likes"],
+  mutationFn:likePostAPI
+})
+const dislikesMutation = useMutation({
+  mutationKey:["dislikes"],
+  mutationFn:dislikePostAPI
+})
+
+
+const followUserHandler=async ()=>{
+  followUserMutation.mutateAsync(targetId).then(()=>{
+    refetchProfile()
+  }).catch(e=>console.log(e))
+
+}
+
+
+const unfollowUserHandler=async ()=>{
+  unfollowUserMutation.mutateAsync(targetId).then(()=>{
+    refetchProfile()
+  }).catch(e=>console.log(e))
+
+}
+
+
+
+const likePostHandler=async ()=>{
+  likesMutation.mutateAsync(postId).then(()=>{
+    refetchPost()
+  }).catch(e=>console.log(e))
+
+}
+
+
+const dislikePostHandler=async ()=>{
+  dislikesMutation.mutateAsync(postId).then(()=>{
+refetchPost();
+  }).catch(e=>console.log(e))
+
+}
+
+ const isFollowing=profileData?.user?.following?.find((user)=>user?.toString()===targetId.toString())
   return (
     <div className="container mx-auto p-4">
       <div className="bg-white rounded-lg shadow-lg p-5">
@@ -73,7 +137,7 @@ const PostDetails = () => {
           {/* like icon */}
           <span
             className="flex items-center gap-1 cursor-pointer"
-            // onClick={likePostHandler}
+            onClick={likePostHandler}
           >
             <FaThumbsUp />
             {data?.postFound?.likes?.length || 0}
@@ -82,7 +146,7 @@ const PostDetails = () => {
           {/* Dislike icon */}
           <span
             className="flex items-center gap-1 cursor-pointer"
-            // onClick={dislikesPostHandler}
+            onClick={dislikePostHandler}
           >
             <FaThumbsDown />
 
@@ -94,9 +158,10 @@ const PostDetails = () => {
             {data?.postFound?.viewers?.length || 0}
           </span>
         </div>
+        
 
         {/* follow icon */}
-        {/* {isFollowing ? (
+        {isFollowing ? (
           <button
             onClick={unfollowUserHandler}
             className="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-red-600 hover:bg-orange-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-orange-500"
@@ -112,7 +177,7 @@ const PostDetails = () => {
             Follow
             <RiUserFollowLine className="ml-2" />
           </button>
-        )} */}
+        )}
 
         {/* author */}
         <span className="ml-2">{/* {postData?.author?.username} */}</span>

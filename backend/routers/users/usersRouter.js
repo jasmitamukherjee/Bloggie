@@ -12,5 +12,9 @@ usersRouter.get("/api/v1/users/checkAuthenticated",userController.checkAuthentic
 usersRouter.post("/api/v1/users/logout",userController.logout);
 usersRouter.get("/api/v1/users/profile",isAuthenticated,userController.profile);
 
+usersRouter.put("/api/v1/users/follow/:followId",isAuthenticated,userController.followUser);
+usersRouter.put("/api/v1/users/unfollow/:unfollowId",isAuthenticated,userController.unFollowUser);
+usersRouter.get("/api/v1/users/account-verification-email",isAuthenticated,userController.verifyEmailAccount);
+usersRouter.get("/api/v1/users/verify-account/:verifyToken",isAuthenticated,userController.verifyEmailAcc);
 
 module.exports=usersRouter;

@@ -46,3 +46,26 @@ export const deletePostAPI = async(postId)=>{
    })
    return posts.data;
 }
+
+//!like post api
+export const likePostAPI = async (postId) => {
+   const response = await axios.put(
+     `${BASE_URL}/likes/${postId}`,
+     {},
+     {
+       withCredentials: true,
+     }
+   );
+   return response.data;
+ };
+ //!dislike post api
+ export const dislikePostAPI = async (postId) => {
+   const response = await axios.put(
+     `${BASE_URL}/dislikes/${postId}`,
+     {},
+     {
+       withCredentials: true,
+     }
+   );
+   return response.data;
+ };

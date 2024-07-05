@@ -1,4 +1,5 @@
 const mongoose = require("mongoose");
+const crypto=require("crypto");
 const userSchema= mongoose.Schema({
     username:{
         type:String,
@@ -92,4 +93,14 @@ const userSchema= mongoose.Schema({
 {
     timestamps:true,
 });
+
+
+userSchema.methods.generateAccVerificationToken=function(){
+    const user=this;
+    const emailToken = crypto.randomBytes(20).toString("hex");
+    user.accountVerificationToken=crypto.createHash("sha256").update(emailToken).digest("hex")
+    user.accountVerificationExpires = Date.now()+10 *60*1000;
+
+return emailToken;
+}
 module.exports=mongoose.model("User",userSchema);

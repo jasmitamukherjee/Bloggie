@@ -75,3 +75,28 @@ export const userProfileAPI = async () => {
 
   return response.data;
 };
+
+// ! follow user
+export const followUserAPI = async (userId) => {
+  const response = await axios.put(
+    `${BASE_URL}/users/follow/${userId}`,
+    {},
+    {
+      withCredentials: true,
+    }
+  );
+
+  return response.data;
+};
+// ! unfollow user
+export const unfollowUserAPI = async (userId) => {
+  const response = await axios.put(
+    `${BASE_URL}/users/unfollow/${userId}`,
+    {},
+    {
+      withCredentials: true,
+    }
+  );
+
+  return response.data;
+};

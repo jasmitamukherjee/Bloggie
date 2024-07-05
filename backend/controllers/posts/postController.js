@@ -69,7 +69,20 @@ if(title){
         async(req,res)=>{
             
                 const postId = req.params.postId;
+                const userId=req.user?req.user : null;
+
                 const postFound = await Post.findById(postId);
+                if(!postFound){
+                  throw new Error("No post found!");
+                }
+                if(userId){
+                  if(!postFound?.viewers.includes(userId)){
+                    postFound.viewers.push(userId);
+                    postFound.viewsCount= postFound?.viewsCount+1;
+                    await postFound.save();
+                  }
+
+                }
                 res.json({
                     status:"success",
                     message:"post fetched successfully",
@@ -112,13 +125,64 @@ if(title){
                 
             
         }
-    )
-}
+    ),
+
+    //like post
+
+  like: asyncHandler(async (req, res) => {
+    //Post id
+    const postId = req.params.postId;
+    //user liking a post
+    const userId = req.user;
+    //Find the post
+    const post = await Post.findById(postId);
+    //Check if a user has already disliked the post
 
 
-//update
-//delete
-//list
-//get single 
+    if (post?.dislikes?.includes(userId)) {
+      post?.dislikes?.pull(userId);
+    }
+    //Check if a user has already liked the post
+    if (post?.likes?.includes(userId)) {
+      post?.likes?.pull(userId);
+    } else {
+      post?.likes?.push(userId);
+    }
+    //resave the post
+    await post.save();
+    //send the response
+    res.json({
+      message: "Post Liked",
+    });
+  }),
+  //unlike post
+  dislike: asyncHandler(async (req, res) => {
+    //Post id
+    const postId = req.params.postId;
+    //user liking a post
+    const userId = req.user;
+    //Find the post
+    const post = await Post.findById(postId);
+    //Check if a user has already liked the post
+    if (post?.likes.includes(userId)) {
+      post?.likes?.pull(userId);
+    }
+    //Check if a user has already disliked the post
+    if (post?.dislikes.includes(userId)) {
+      post?.dislikes?.pull(userId);
+    } else {
+      post?.dislikes?.push(userId);
+    }
+    //resave the post
+    await post.save();
+    //send the response
+    res.json({
+      message: "Post Disliked",
+    });
+  }),
+
+};
+
+
 
 module.exports= postController;
