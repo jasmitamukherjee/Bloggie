@@ -25,15 +25,13 @@ const Notifications = () => {
   });
 
   // Read notification handler
-  const readNotificationHandler = async (id) => {
-    try {
-      await mutation.mutateAsync(id);
-      const updatedNotifications = unreadNotifications.filter((notification) => notification._id !== id);
-      setUnreadNotifications(updatedNotifications);
-      refetch();
-    } catch (error) {
-      console.error(error);
-    }
+  const readNotificationHandler = (id) => {
+    mutation
+      .mutateAsync(id)
+      .then(() => {
+        refetch();
+      })
+      .catch((e) => console.log(e));
   };
 
   return (
