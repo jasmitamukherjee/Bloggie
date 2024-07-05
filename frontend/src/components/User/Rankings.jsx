@@ -1,7 +1,17 @@
+import { useQuery } from "@tanstack/react-query";
 import React from "react";
-import { FaTrophy } from "react-icons/fa";
+import { FaTrophy,FaDollarSign } from "react-icons/fa";
+import { fetchAllEarningsAPI } from "../../APIServices/earnings/earningsAPI";
+import Avatar from "./Avatar";
 
 const Rankings = () => {
+
+   const {data,isError,isLoading,isSuccess,error} =useQuery({
+        queryKey:["ranking"],
+        queryFn:fetchAllEarningsAPI
+    })
+
+    console.log(data)
   return (
     <div className="flex flex-col items-center justify-center min-h-screen bg-gray-200 py-6 sm:py-12">
       <div className="w-full sm:max-w-xl mx-auto min-h-screen ">
@@ -17,8 +27,8 @@ const Rankings = () => {
                   </p>
                 </div>
               </div>
-              {/* <div className="divide-y divide-gray-200">
-                {data?.map((ranking, index) => (
+              <div className="divide-y divide-gray-200">
+                {data?.earnings?.map((ranking, index) => (
                   <div
                     key={index}
                     className="pt-6 pb-8 text-base leading-6 space-y-4 text-gray-700 sm:text-lg sm:leading-7"
@@ -29,33 +39,34 @@ const Rankings = () => {
                           index === 0 ? "text-yellow-500" : "text-gray-500"
                         }`}
                       >
-                        {`#${ranking.rank}`}
+                        {ranking.totalAmount.toFixed(2)>0 && `#${ranking.rank}`}
                       </div>
-                      {ranking.user.profilePicture ? (
+                      {ranking.totalAmount.toFixed(2)>0 && ranking?.user?.profilePicture ? (
                         <img
-                          src={ranking.user.profilePicture}
+                          src={ranking?.user?.profilePicture}
                           alt="avatar"
                           className="w-12 h-12 rounded-full"
                         />
                       ) : (
+                        ranking.totalAmount.toFixed(2)>0 &&
                         <Avatar />
                       )}
                       <div className="text-black font-medium">
-                        {ranking.user.username}
+                        {ranking.totalAmount.toFixed(2)>0 && ranking.user.username}
                       </div>
                       <div className="text-gray-600">
-                        {`Posts: ${ranking.user.posts?.length}`}
+                        {ranking.totalAmount.toFixed(2)>0 && `Posts: ${ranking.user.posts?.length}`}
                       </div>
                       <div className="ml-auto flex items-center space-x-2">
-                        <FaDollarSign className="text-green-500 text-xl" />
+                       
                         <div className="text-gray-600 font-medium">
-                          {ranking.totalAmount}
+                         {ranking.totalAmount.toFixed(2)>0 && ` Rs. ${ranking.totalAmount.toFixed(2)}`} 
                         </div>
                       </div>
                     </div>
                   </div>
                 ))}
-              </div> */}
+              </div>
             </div>
           </div>
         </div>

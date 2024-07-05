@@ -24,6 +24,7 @@ import CheckoutForm from './components/Plans/ChekoutForm';
 import PaymentSuccess from './components/Plans/PaymentSuccess';
 import PayingFreePlan from './components/Plans/PayingFreePlan';
 import AccountVerifiedComponent from './components/User/AccountVerification';
+import Rankings from './components/User/Rankings';
 
 function App() {
   const {isError, isLoading, data, error, refetch} = useQuery({
@@ -82,6 +83,7 @@ const {userAuth}=useSelector((state)=>state.auth)
         </AuthRoute>} path="/profile"/>
 
         <Route element={<Pricing/>} path="/pricing"/>
+
         <Route element={<CheckoutForm/>} path="/checkout/:planId"/>
         <Route element={<AuthRoute>
           <PaymentSuccess/>
@@ -91,6 +93,7 @@ const {userAuth}=useSelector((state)=>state.auth)
           <PayingFreePlan/>
         </AuthRoute>} path="/free-subscription"/>
 
+        <Route element={<Rankings/>} path="/rankings"/>
 
       </Routes>
       

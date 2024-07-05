@@ -2,6 +2,8 @@ const asyncHandler = require("express-async-handler");
 const Post = require("../../models/Post/Post");
 const Category= require("../../models/Category/Category");
 const User = require("../../models/User/User");
+const Notification = require("../../models/Notification/Notification");
+const sendNotificationMessage = require("../../utils/sendNotificationMessage");
 const postController= {
     //create
 
@@ -28,6 +30,23 @@ const postController= {
         //push posts to user 
 userFound.posts.push(postCreated?._id)
 await userFound.save();
+//notif
+await Notification.create({
+  userId: req.user,
+  postId: postCreated._id,
+  message: `New post created by ${userFound.username}`,
+});
+
+userFound.followers.forEach(async (follower)=>{
+  const users = await User.find({_id:follower})
+
+  users.forEach((user)=>{
+    sendNotificationMessage(user.email,postCreated._id)
+
+  })
+
+})
+
         res.json({
             status:"success",
             message:"Post created Successfully",
