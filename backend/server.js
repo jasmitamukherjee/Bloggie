@@ -5,7 +5,7 @@ const passport = require("./utils/passport-config");
 
 const express=require("express");
 const cookieParser=require("cookie-parser");
-
+const cron=require("node-cron")
 const Post= require("./models/Post/Post");
 const connectDB = require("./utils/connectDB");
 const postRouter = require("./routers/post/postRouter");
@@ -13,7 +13,21 @@ const usersRouter = require("./routers/users/usersRouter");
 const categoriesRouter = require("./routers/category/categoriesRouter");
 const planRouter = require("./routers/plan/planRouter");
 const stripePaymentRouter = require("./routers/stripePayment/stripePaymentRouter");
+const calculateEarnings = require("./utils/calculateEarnings");
+const earningsRouter = require("./routers/earnings/earningsRouter");
+
 connectDB();
+cron.schedule("59 23 * * *",async()=>{
+    const today=new Date();
+const tomorrow = new Date(today);
+tomorrow.setDate(tomorrow.getDate()+1)
+if(today.getMonth() !== tomorrow.getMonth())
+    {calculateEarnings();}
+
+},{
+    scheduled:true,
+    timezone:"Asia/Kolkata"
+})
 const app= express();
 
 const PORT = 5000;
@@ -35,6 +49,8 @@ app.use("/",usersRouter)
 app.use("/",categoriesRouter)
 app.use("/",planRouter)
 app.use("/",stripePaymentRouter)
+app.use("/",earningsRouter)
+
 
 
 

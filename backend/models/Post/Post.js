@@ -24,6 +24,9 @@ const postSchema=mongoose.Schema({
         default:()=>
             new Date(new Date().getFullYear(),new Date().getMonth()+1,1)
     },
+    lastCalculatedViewsCount:{type:Number,default:0}
+    ,
+
     thisMonthEarnings:{
         type:Number,
         default:0,

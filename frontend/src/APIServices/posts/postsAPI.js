@@ -23,7 +23,9 @@ export const fetchAllPosts = async(filters)=>{
 
 //fetch post
 export const fetchPost = async(postId)=>{
-   const posts = await axios.get(`${BASE_URL}/${postId}`)
+   const posts = await axios.get(`${BASE_URL}/${postId}`,{
+      withCredentials:true
+   })
    return posts.data;
 }
 

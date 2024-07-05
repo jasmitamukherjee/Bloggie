@@ -76,11 +76,16 @@ if(title){
                   throw new Error("No post found!");
                 }
                 if(userId){
-                  if(!postFound?.viewers.includes(userId)){
-                    postFound.viewers.push(userId);
-                    postFound.viewsCount= postFound?.viewsCount+1;
-                    await postFound.save();
-                  }
+                  await Post.findByIdAndUpdate(postId,{
+                    $addToSet:{viewers:userId},
+                  },{
+                    new:true
+                  })
+                  // if(!postFound?.viewers.includes(userId)){
+                  //   postFound.viewers.push(userId);
+                  //   postFound.viewsCount= postFound?.viewsCount+1;
+                  //   await postFound.save();
+                  // }
 
                 }
                 res.json({
