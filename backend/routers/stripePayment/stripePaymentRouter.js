@@ -2,6 +2,7 @@ const express = require("express");
 const isAuthenticated = require("../../middlewares/isAuthenticated");
 // const checkUserPlan = require("../../middlewares/checkUserPlan");
 const stripePaymentController = require("../../controllers/stripePayment/stripePaymentController");
+const checkUserPlan = require("../../middlewares/checkUserPlan");
 
 const stripePaymentRouter = express.Router();
 
@@ -15,10 +16,10 @@ stripePaymentRouter.post(
 
 // //----verify payment----
 stripePaymentRouter.get("/api/v1/stripe/verify/:paymentId",stripePaymentController.verify);
-// stripePaymentRouter.get(
-//   "/free-plan",
-//   isAuthenticated,
-//   stripePaymentController.free
-// );
+stripePaymentRouter.get(
+  "/api/v1/stripe/free-plan",
+  isAuthenticated,
+  stripePaymentController.free
+);
 
 module.exports = stripePaymentRouter;

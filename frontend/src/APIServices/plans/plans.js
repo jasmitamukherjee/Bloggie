@@ -20,3 +20,4 @@ export const fetchPlanAPI = async (id) => {
   const plan = await axios.get(`${BASE_URL}/${id}`);
   return plan.data;
 };
+

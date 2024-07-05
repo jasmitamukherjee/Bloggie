@@ -22,6 +22,7 @@ import CreatePlan from './components/Plans/CreatePlan';
 import Pricing from './components/Plans/Pricing';
 import CheckoutForm from './components/Plans/ChekoutForm';
 import PaymentSuccess from './components/Plans/PaymentSuccess';
+import PayingFreePlan from './components/Plans/PayingFreePlan';
 
 function App() {
   const {isError, isLoading, data, error, refetch} = useQuery({
@@ -80,6 +81,10 @@ const {userAuth}=useSelector((state)=>state.auth)
         <Route element={<AuthRoute>
           <PaymentSuccess/>
         </AuthRoute>} path="/success"/>
+
+        <Route element={<AuthRoute>
+          <PayingFreePlan/>
+        </AuthRoute>} path="/free-subscription"/>
 
 
       </Routes>

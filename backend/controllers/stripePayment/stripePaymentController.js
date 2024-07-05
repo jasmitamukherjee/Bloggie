@@ -87,21 +87,21 @@ const stripePaymentController = {
       }
     }),
     //Free plan
-    // free: asyncHandler(async (req, res) => {
-    //   //check for the user
-    //   const user = await User.findById(req.user);
-    //   if (!user) {
-    //     throw new Error("User not found");
-    //   }
-    //   //update the user field
-    //   user.hasSelectedPlan = true;
-    //   await user.save();
-    //   //send the response
-    //   res.json({
-    //     status: true,
-    //     message: "Payment verified, user updated",
-    //   });
-    // }),
+    free: asyncHandler(async (req, res) => {
+      //check for the user
+      const user = await User.findById(req.user);
+      if (!user) {
+        throw new Error("User not found");
+      }
+      //update the user field
+      user.hasSelectedPlan = true;
+      await user.save();
+      //send the response
+      res.json({
+        status: true,
+        message: "Payment verified, user updated",
+      });
+    }),
 }
 
 module.exports = stripePaymentController;
