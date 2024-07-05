@@ -100,3 +100,29 @@ export const unfollowUserAPI = async (userId) => {
 
   return response.data;
 };
+
+// ! send Email verification token
+export const sendEmailVerificatonTokenAPI = async () => {
+  const response = await axios.put(
+    `${BASE_URL}/users/account-verification-email`,
+    {},
+    {
+      withCredentials: true,
+    }
+  );
+
+  return response.data;
+};
+
+// ! send Email verification token
+export const verifyUserAccountAPI = async (verifyToken) => {
+  const response = await axios.put(
+    `${BASE_URL}/users/verify-account/${verifyToken}`,
+    {},
+    {
+      withCredentials: true,
+    }
+  );
+
+  return response.data;
+};

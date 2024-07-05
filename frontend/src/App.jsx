@@ -23,6 +23,7 @@ import Pricing from './components/Plans/Pricing';
 import CheckoutForm from './components/Plans/ChekoutForm';
 import PaymentSuccess from './components/Plans/PaymentSuccess';
 import PayingFreePlan from './components/Plans/PayingFreePlan';
+import AccountVerifiedComponent from './components/User/AccountVerification';
 
 function App() {
   const {isError, isLoading, data, error, refetch} = useQuery({
@@ -66,6 +67,10 @@ const {userAuth}=useSelector((state)=>state.auth)
         <Route element={<AuthRoute>
           <CreatePlan/>
         </AuthRoute>} path="create-plan"/>
+        
+        <Route element={<AuthRoute>
+          <AccountVerifiedComponent/>
+        </AuthRoute>} path="account-verification/:verifyToken"/>
 
      </Route>
 
@@ -95,3 +100,7 @@ const {userAuth}=useSelector((state)=>state.auth)
 }
 
 export default App
+
+
+
+

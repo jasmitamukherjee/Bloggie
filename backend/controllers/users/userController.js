@@ -182,7 +182,6 @@ if(!user){
     // //send the email
     sendAccVerificationEmail(user?.email, token);
     res.json({
-token,
       message: `Account verification email sent to ${user?.email} token expires in 10 minutes`,
     });
   }),

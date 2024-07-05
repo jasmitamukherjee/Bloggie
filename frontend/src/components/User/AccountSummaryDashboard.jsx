@@ -9,13 +9,22 @@ import {
 } from "react-icons/fa";
 import { Link } from "react-router-dom";
 import { useMutation, useQuery } from "@tanstack/react-query";
-import { userProfileAPI } from "../../APIServices/users/usersAPI";
+import { sendEmailVerificatonTokenAPI, userProfileAPI } from "../../APIServices/users/usersAPI";
+import AlertMessage from "../Alert/AlertMessage";
 
 const AccountSummaryDashboard = () => {
   const {data,isLoading,isError,isSuccess,error}=useQuery({
     queryKey:["profile"],
     queryFn:userProfileAPI
   })
+const verificationTokenMutation = useMutation({
+  mutationKey:["send-email-verificatiom-token"],
+mutationFn:sendEmailVerificatonTokenAPI})
+
+const handleSendVerificationEmail=()=>{
+verificationTokenMutation.mutate();
+}
+
   //check if user has email
 
   const hasEmail = data?.user?.email;
@@ -118,18 +127,18 @@ const AccountSummaryDashboard = () => {
         Welcome Back: {data?.user?.username}
       </p>
       {/* display account verification status */}
-      {/* {mutation.isPending ? (
-        <AlertMessage type="loading" message="Loading..." />
-      ) : mutation.isError ? (
+      {verificationTokenMutation.isPending ? (
+        <AlertMessage type="loading" message="Sending email..." />
+      ) : verificationTokenMutation.isError ? (
         <AlertMessage
           type="error"
           message={
-            mutation?.error?.message || mutation?.error?.response?.data?.message
+            verificationTokenMutation?.error?.message || verificationTokenMutation?.error?.response?.data?.message
           }
         />
-      ) : mutation.isSuccess ? (
-        <AlertMessage type="success" message={mutation?.data?.message} />
-      ) : null} */}
+      ) : verificationTokenMutation.isSuccess ? (
+        <AlertMessage type="success" message={verificationTokenMutation?.data?.message} />
+      ) : null}
       {!hasPlan && (
         <div
           className="bg-yellow-100 border-l-4 border-yellow-500 text-yellow-700 p-4 mb-4"
@@ -154,7 +163,7 @@ const AccountSummaryDashboard = () => {
           <p>
             Your account is not verified. Please{" "}
             <button
-              // onClick={handleSendVerificationEmail}
+              onClick={handleSendVerificationEmail}
               className="underline text-red-800"
             >
               verify your account
