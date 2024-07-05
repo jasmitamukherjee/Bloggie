@@ -29,7 +29,6 @@ const CreatePlan = () => {
       price: Yup.string().required("Price name is required"),
 
 
-      limitations: Yup.string().required("Limitations are required"),
       features: Yup.string().required("Features are required"),
 
     }),
@@ -40,7 +39,6 @@ const CreatePlan = () => {
       const planData= {
         planName: values.planName,
         features: values.features.split(",").map((feature)=>feature.trim()),
-        limitations: values.limitations.split(",").map((limitation)=>limitation.trim()),
         price:values.price
 
       }
@@ -110,7 +108,7 @@ const CreatePlan = () => {
             <div className="text-red-500 mt-1">{formik.errors.features}</div>
           )}
         </div>
-        <div className="mb-4">
+        {/* <div className="mb-4">
           <label className="block mb-2 text-sm font-bold text-gray-700">
             Limitations (comma separated):
           </label>
@@ -123,7 +121,7 @@ const CreatePlan = () => {
           {formik.touched.limitations && formik.errors.limitations && (
             <div className="text-red-500 mt-1">{formik.errors.limitations}</div>
           )}
-        </div>
+        </div> */}
         <div className="mb-4">
           <label className="block mb-2 text-sm font-bold text-gray-700">
             Price:

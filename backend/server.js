@@ -12,6 +12,7 @@ const postRouter = require("./routers/post/postRouter");
 const usersRouter = require("./routers/users/usersRouter");
 const categoriesRouter = require("./routers/category/categoriesRouter");
 const planRouter = require("./routers/plan/planRouter");
+const stripePaymentRouter = require("./routers/stripePayment/stripePaymentRouter");
 connectDB();
 const app= express();
 
@@ -33,6 +34,8 @@ app.use("/",postRouter)
 app.use("/",usersRouter)
 app.use("/",categoriesRouter)
 app.use("/",planRouter)
+app.use("/",stripePaymentRouter)
+
 
 
 

@@ -19,6 +19,9 @@ import UserDashbaord from './components/User/UserDashboard';
 import AccountSummaryDashboard from './components/User/AccountSummaryDashboard';
 import AddCategory from './components/Category/AddCategory';
 import CreatePlan from './components/Plans/CreatePlan';
+import Pricing from './components/Plans/Pricing';
+import CheckoutForm from './components/Plans/ChekoutForm';
+import PaymentSuccess from './components/Plans/PaymentSuccess';
 
 function App() {
   const {isError, isLoading, data, error, refetch} = useQuery({
@@ -72,7 +75,13 @@ const {userAuth}=useSelector((state)=>state.auth)
           <Profile/>
         </AuthRoute>} path="/profile"/>
 
-      
+        <Route element={<Pricing/>} path="/pricing"/>
+        <Route element={<CheckoutForm/>} path="/checkout/:planId"/>
+        <Route element={<AuthRoute>
+          <PaymentSuccess/>
+        </AuthRoute>} path="/success"/>
+
+
       </Routes>
       
         </BrowserRouter>

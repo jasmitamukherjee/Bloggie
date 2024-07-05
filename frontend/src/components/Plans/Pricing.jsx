@@ -1,7 +1,23 @@
+import { useQuery } from "@tanstack/react-query";
 import React from "react";
 import { Link } from "react-router-dom";
+import { fetchPlansAPI } from "../../APIServices/plans/plans";
 
 const Pricing = () => {
+  const { data, isError, isLoading, error } = useQuery({
+    queryKey: ["pricing-lists"],
+    queryFn: fetchPlansAPI,
+  });
+  //Get free plan
+  const freePlan = data?.plans?.filter((plan) => plan.planName === "Free");
+  //Get free premium plan
+  const premiumPlan = data?.plans?.filter(
+    (plan) => plan.planName === "Premium"
+  );
+
+  console.log(premiumPlan);
+
+  //Get the premium plan
   return (
     <section className="py-24">
       <div className="container mx-auto px-4">
@@ -17,9 +33,13 @@ const Pricing = () => {
           {/* Free Plan */}
           <div className="w-full lg:w-1/2 p-4">
             <div className="border border-gray-200 rounded-3xl px-8 lg:px-10 pb-14 pt-10 h-full">
-              <h2 className="text-3xl font-bold font-heading mb-6">Free</h2>
+              <h2 className="text-3xl font-bold font-heading mb-6">
+                {freePlan?.[0]?.planName}
+              </h2>
               <div className="flex items-center gap-4 flex-wrap mb-6">
-                <h2 className="text-6xl font-bold font-heading">$ 0.0</h2>
+                <h2 className="text-6xl font-bold font-heading">
+                  Rs. {freePlan?.[0]?.price}
+                </h2>
                 <p className="text-xl font-medium">per month</p>
               </div>
 
@@ -33,7 +53,7 @@ const Pricing = () => {
                 What you’ll get
               </h2>
               <ul className="flex flex-col gap-4">
-                {/* {freePlan?.[0]?.features?.map((feature) => {
+                {freePlan?.[0]?.features?.map((feature) => {
                   return (
                     <li key={feature} className="flex gap-4">
                       <div className="w-6 h-6">
@@ -55,7 +75,7 @@ const Pricing = () => {
                       <span>{feature}</span>
                     </li>
                   );
-                })} */}
+                })}
               </ul>
             </div>
           </div>
@@ -63,19 +83,18 @@ const Pricing = () => {
           <div className="w-full lg:w-1/2 p-4">
             <div className="bg-orange-500 rounded-3xl px-8 lg:px-10 pb-14 pt-10 h-full">
               <h2 className="text-white text-3xl font-bold font-heading mb-6">
-                {/* {premiumPlan?.[0]?.planName} */}
-                Premium
+                {premiumPlan?.[0]?.planName}
+               
               </h2>
               <div className="flex items-center gap-4 flex-wrap mb-6">
                 <h2 className="text-white text-6xl font-bold font-heading">
-                  {/* $ {premiumPlan?.[0]?.price} */}
-                  300
+                  Rs. {premiumPlan?.[0]?.price}
                 </h2>
                 <p className="text-white text-xl font-medium">Life Time</p>
               </div>
               <Link
                 className="w-full text-center h-14 py-4 px-6 rounded-full bg-white border border-gray-200 shadow hover:bg-gray-50 focus:ring focus:ring-orange-200 transition duration-200 mb-8 flex items-center justify-center gap-2"
-                to="/premium-subscription"
+                to={`/checkout/${premiumPlan?.[0]?._id}`}
               >
                 <span className="text-sm font-semibold ">Sign up today</span>
                 <svg
@@ -98,7 +117,7 @@ const Pricing = () => {
                 What you’ll get
               </h2>
               <ul className="flex flex-col gap-4">
-                {/* {premiumPlan?.[0]?.features?.map((feature) => {
+                {premiumPlan?.[0]?.features?.map((feature) => {
                   return (
                     <li key={feature} className="flex gap-4">
                       <div className="w-6 h-6">
@@ -120,7 +139,7 @@ const Pricing = () => {
                       <span className="text-white">{feature}</span>
                     </li>
                   );
-                })} */}
+                })}
               </ul>
             </div>
           </div>
