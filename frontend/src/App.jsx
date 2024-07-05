@@ -18,6 +18,7 @@ import AuthRoute from './components/AuthRoute/AuthRoute';
 import UserDashbaord from './components/User/UserDashboard';
 import AccountSummaryDashboard from './components/User/AccountSummaryDashboard';
 import AddCategory from './components/Category/AddCategory';
+import CreatePlan from './components/Plans/CreatePlan';
 
 function App() {
   const {isError, isLoading, data, error, refetch} = useQuery({
@@ -57,6 +58,10 @@ const {userAuth}=useSelector((state)=>state.auth)
         <Route element={<AuthRoute>
           <AddCategory/>
         </AuthRoute>} path="add-category"/>
+
+        <Route element={<AuthRoute>
+          <CreatePlan/>
+        </AuthRoute>} path="create-plan"/>
 
      </Route>
 

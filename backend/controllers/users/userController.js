@@ -114,6 +114,11 @@ if(!user){
   logout:asyncHandler(async(req,res)=>{
     res.cookie("token","",{maxAge:1});
     res.status(200).json({message:"logged out successfully"})
+  }),
+  //profile
+  profile:asyncHandler(async(req,res)=>{
+    const user= await User.findById(req.user).populate("posts").select("-password -passwordResetToken -accountVerificationToken -accountVerificationExpires -passwordResetExpires")
+    res.json({user})
   })
 
 }

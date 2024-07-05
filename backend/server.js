@@ -11,6 +11,7 @@ const connectDB = require("./utils/connectDB");
 const postRouter = require("./routers/post/postRouter");
 const usersRouter = require("./routers/users/usersRouter");
 const categoriesRouter = require("./routers/category/categoriesRouter");
+const planRouter = require("./routers/plan/planRouter");
 connectDB();
 const app= express();
 
@@ -31,6 +32,8 @@ app.use(cookieParser());
 app.use("/",postRouter)
 app.use("/",usersRouter)
 app.use("/",categoriesRouter)
+app.use("/",planRouter)
+
 
 
 //not found handler 
