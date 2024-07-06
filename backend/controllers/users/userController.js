@@ -44,7 +44,7 @@ login:asyncHandler(async(req,res,next)=>{
         //set token 
         res.cookie("token",token,{
             httpOnly: true,
-            secure: false,
+            secure: true,
             sameSite:"strict",
             maxAge : 24*60*60*1000
         })
@@ -81,7 +81,7 @@ googleAuthCallback: asyncHandler(async (req, res, next) => {
         //set the token into the cooke
         res.cookie("token", token, {
           httpOnly: true,
-          secure: false,
+          secure: true,
           sameSite: "strict",
           maxAge: 24 * 60 * 60 * 1000, //1 day:
         });
