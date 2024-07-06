@@ -30,16 +30,14 @@ export const fetchPost = async(postId)=>{
 }
 
 //update post 
-export const updatePostAPI = async (postData)=>{
-   console.log(postData)
-    const response =await axios.put(`${BASE_URL}/${postData?.postId}`,{
-       title:postData.title,
-       description:postData.description
-    },
+export const updatePostAPI = async ({formData,postId})=>{
+    const response =await axios.put(`${BASE_URL}/${postId}`,
+      formData
+    ,
    {
       withCredentials:true
    });
-    return response;
+    return response.data;
 }
 //delete 
 export const deletePostAPI = async(postId)=>{

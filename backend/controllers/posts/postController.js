@@ -131,7 +131,7 @@ if(title){
                 if(!postFound){
                     throw new Error("Post not found")
                 }
-                const postUpdated= await Post.findByIdAndUpdate(postId,{title:req.body.title,description:req.body.description},{
+                const postUpdated= await Post.findByIdAndUpdate(postId,{description:req.body.description,image:req.file},{
                     new:true
                 })
                 res.json({

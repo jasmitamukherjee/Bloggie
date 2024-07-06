@@ -2,7 +2,7 @@
 import { useQuery } from "@tanstack/react-query";
 import React from "react";
 import { FaDollarSign } from "react-icons/fa";
-import { getMyEarningsAPI } from "../../APIServices/earnings/earningsAPI";
+import { getMyEarningsAPI } from "../../APIServices/earnings/earningsAPI.js";
 
 const MyEarnings = () => {
   const { data } = useQuery({

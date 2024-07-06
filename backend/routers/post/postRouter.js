@@ -18,7 +18,7 @@ postRouter.get("/api/v1/posts",postController.fetchAllPosts)
 //delete post 
 postRouter.delete("/api/v1/posts/:postId", isAuthenticated,postController.deletePost)
 //update post 
-postRouter.put("/api/v1/posts/:postId", isAuthenticated,postController.updatePost)
+postRouter.put("/api/v1/posts/:postId", isAuthenticated,upload.single("image"),postController.updatePost)
 
 //get a single post 
 postRouter.get("/api/v1/posts/:postId",optionalAuth,postController.getPost)

@@ -170,7 +170,7 @@ const PostDetails = () => {
           </button>
         )}
 
-        <span className="ml-2">{/* {data?.postFound?.author?.username} */}</span>
+        <span className="ml-2">{data?.postFound?.author?.username}</span>
 
         <div className="flex justify-between items-center mb-3">
           <div

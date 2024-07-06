@@ -29,6 +29,7 @@ import Notifications from './components/Notification/Notifications';
 import MyFollowing from './components/User/MyFollowing';
 import MyFollowers from './components/User/MyFollowers';
 import MyEarnings from './components/User/MyEarnings';
+import DashboardPosts from './components/User/DashboardPosts';
 
 function App() {
   const {isError, isLoading, data, error, refetch} = useQuery({
@@ -68,6 +69,9 @@ const {userAuth}=useSelector((state)=>state.auth)
         <Route element={<AuthRoute>
           <AddCategory/>
         </AuthRoute>} path="add-category"/>
+        <Route element={<AuthRoute>
+          <UpdatePost/>
+        </AuthRoute>} path="update-post/:postId"/>
 
         <Route element={<AuthRoute>
           <MyFollowing/>
@@ -89,6 +93,10 @@ const {userAuth}=useSelector((state)=>state.auth)
         <Route element={<AuthRoute>
           <MyEarnings/>
         </AuthRoute>} path="my-earnings"/>
+
+        <Route element={<AuthRoute>
+          <DashboardPosts/>
+        </AuthRoute>} path="posts"/>
         
         <Route element={<AuthRoute>
           <AccountVerifiedComponent/>

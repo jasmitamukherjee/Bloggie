@@ -9,6 +9,7 @@ import { fetchCategoriesAPI } from '../../APIServices/category/categoryAPI';
 import PostCategory from '../Category/PostCategory';
 import {FaSearch} from "react-icons/fa";
 import {MdClear} from "react-icons/md";
+import truncateString from '../../utils/truncateString';
 
 const PostsList = () => {
     const [filters, setFilters] = useState({});
@@ -132,11 +133,11 @@ refetch();
                                             <img
                                                 className='absolute inset-0 w-full h-full object-cover rounded-2xl'
                                                 src={post?.image?.path}
-                                                alt={post?.image?.description}
+                                                alt={post?._id}
                                             />
                                         </div>
                                         <div className="rendered-html-content mb-2"
-                                            dangerouslySetInnerHTML={{ __html: post?.description }}
+                                            dangerouslySetInnerHTML={{ __html: truncateString(post?.description,200) }}
                                         />
                                         <div className='flex flex-wrap items-center gap-3'>
                                             <p className='text-gray-500 text-sm'>
