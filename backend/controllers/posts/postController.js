@@ -29,6 +29,9 @@ const postController= {
  await categoryFound.save();
         //push posts to user 
 userFound.posts.push(postCreated?._id)
+
+//update user acc
+userFound.updateAccountType();
 await userFound.save();
 //notif
 await Notification.create({

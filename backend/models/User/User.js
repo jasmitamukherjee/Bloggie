@@ -5,7 +5,7 @@ const userSchema= mongoose.Schema({
         type:String,
         required:true,
     },
-    profilePictire:{
+    profilePicture:{
         type:Object,
         default:null,
     },
@@ -88,7 +88,15 @@ const userSchema= mongoose.Schema({
     following:[{
         type:mongoose.Schema.Types.ObjectId,
         ref:"User",
-    }]
+    }],
+    accountType:{
+        type:String,
+        default:"Basic"
+    },
+    role:{
+        type:String,
+        default:"user"
+    }
 },
 {
     timestamps:true,
@@ -103,4 +111,18 @@ userSchema.methods.generateAccVerificationToken=function(){
 
 return emailToken;
 }
+
+//type account 
+userSchema.methods.updateAccountType = function(){
+    const postCount = this.posts.length;
+    if(postCount>=50){
+        this.accountType="Premium"
+    }
+    else if (postCount>=10){
+        this.accountType= "Standard"
+    }else{
+        this.accountType="Basic"
+    }
+}
+
 module.exports=mongoose.model("User",userSchema);

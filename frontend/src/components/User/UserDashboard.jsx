@@ -43,12 +43,13 @@ const navigation = [
     icon: FaUsers,
     current: false,
   },
-  {
-    name: "Create Plan",
-    href: "/dashboard/create-plan",
-    icon: FaCalendarPlus,
-    current: false,
-  },
+  // {
+  //   name: "Create Plan",
+  //   href: "/dashboard/create-plan",
+  //   icon: FaCalendarPlus,
+  //   current: false,
+  // },
+
   {
     name: "Add Category",
     href: "/dashboard/add-category",
