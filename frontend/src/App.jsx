@@ -136,7 +136,7 @@ const {userAuth}=useSelector((state)=>state.auth)
           <PayingFreePlan/>
         </AuthRoute>} path="/free-subscription"/>
 
-        <Route element={<Rankings/>} path="/ranking"/>
+        <Route element={<Rankings/>} path="/rankings"/>
 
       </Routes>
       

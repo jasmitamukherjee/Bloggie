@@ -38,7 +38,7 @@ const MyFollowers = () => {
                     {follower?.profilePicture ? (
                       <img
                         className="w-24 h-24 rounded-full block mb-6 mx-auto"
-                        src={follower?.profilePicture}
+                        src={follower?.profilePicture?.path}
                         alt
                       />
                     ) : (

@@ -116,7 +116,7 @@ export default function PrivateNavbar() {
                         {data?.user?.profilePicture ? (
                           <img
                             className="h-10 w-10 rounded-full"
-                            src={data?.user?.profilePicture}
+                            src={data?.user?.profilePicture?.path}
                             alt="pic"
                           />
                         ) : (

@@ -43,7 +43,7 @@ const Rankings = () => {
                       </div>
                       {ranking.totalAmount.toFixed(2)>0 && ranking?.user?.profilePicture ? (
                         <img
-                          src={ranking?.user?.profilePicture}
+                          src={ranking?.user?.profilePicture?.path}
                           alt="avatar"
                           className="w-12 h-12 rounded-full"
                         />
