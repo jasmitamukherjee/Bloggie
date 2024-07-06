@@ -28,6 +28,7 @@ import Rankings from './components/User/Rankings';
 import Notifications from './components/Notification/Notifications';
 import MyFollowing from './components/User/MyFollowing';
 import MyFollowers from './components/User/MyFollowers';
+import MyEarnings from './components/User/MyEarnings';
 
 function App() {
   const {isError, isLoading, data, error, refetch} = useQuery({
@@ -84,6 +85,10 @@ const {userAuth}=useSelector((state)=>state.auth)
         <Route element={<AuthRoute>
           <Notifications/>
         </AuthRoute>} path="notifications"/>
+
+        <Route element={<AuthRoute>
+          <MyEarnings/>
+        </AuthRoute>} path="my-earnings"/>
         
         <Route element={<AuthRoute>
           <AccountVerifiedComponent/>
