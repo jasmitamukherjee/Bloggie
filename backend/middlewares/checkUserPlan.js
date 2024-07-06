@@ -5,7 +5,6 @@ const checkUserPlan = asyncHandler(async (req, res, next) => {
   try {
     //get the login
     const user = await User.findById(req.user);
-    console.log(user);
     //check user plan
     if (!user?.hasSelectedPlan) {
       return res.status(401).json({
