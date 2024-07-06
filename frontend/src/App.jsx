@@ -26,6 +26,8 @@ import PayingFreePlan from './components/Plans/PayingFreePlan';
 import AccountVerifiedComponent from './components/User/AccountVerification';
 import Rankings from './components/User/Rankings';
 import Notifications from './components/Notification/Notifications';
+import MyFollowing from './components/User/MyFollowing';
+import MyFollowers from './components/User/MyFollowers';
 
 function App() {
   const {isError, isLoading, data, error, refetch} = useQuery({
@@ -67,6 +69,14 @@ const {userAuth}=useSelector((state)=>state.auth)
         </AuthRoute>} path="add-category"/>
 
         <Route element={<AuthRoute>
+          <MyFollowing/>
+        </AuthRoute>} path="my-followings"/>
+
+        <Route element={<AuthRoute>
+          <MyFollowers/>
+        </AuthRoute>} path="my-followers"/>
+
+        <Route element={<AuthRoute>
           <CreatePlan/>
         </AuthRoute>} path="create-plan"/>
 
@@ -99,7 +109,7 @@ const {userAuth}=useSelector((state)=>state.auth)
           <PayingFreePlan/>
         </AuthRoute>} path="/free-subscription"/>
 
-        <Route element={<Rankings/>} path="/rankings"/>
+        <Route element={<Rankings/>} path="/ranking"/>
 
       </Routes>
       

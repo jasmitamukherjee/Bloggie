@@ -58,11 +58,11 @@ const postSchema=mongoose.Schema({
     viewsCount: { type: Number, default: 0 }
     ,
 
-    comments:{
+    comments:[{
         type:mongoose.Schema.Types.ObjectId,
         ref:"Comment",
 
-    },
+    }],
     isBlocked:{
         type:Boolean,
         default:false,

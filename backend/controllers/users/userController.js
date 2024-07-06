@@ -119,7 +119,7 @@ if(!user){
   }),
   //profile
   profile:asyncHandler(async(req,res)=>{
-    const user= await User.findById(req.user).populate("posts").select("-password -passwordResetToken -accountVerificationToken -accountVerificationExpires -passwordResetExpires")
+    const user= await User.findById(req.user).populate("followers").populate("following").populate("posts").select("-password -passwordResetToken -accountVerificationToken -accountVerificationExpires -passwordResetExpires")
     res.json({user})
   }),
   followUser:asyncHandler(async(req,res)=>{

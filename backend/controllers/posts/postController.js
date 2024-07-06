@@ -90,7 +90,13 @@ if(title){
                 const postId = req.params.postId;
                 const userId=req.user?req.user : null;
 
-                const postFound = await Post.findById(postId);
+                const postFound = await Post.findById(postId).populate({
+                  path:"comments",
+                  populate:{
+                    path:"author",
+                    select:"username"
+                  }
+                });
                 if(!postFound){
                   throw new Error("No post found!");
                 }

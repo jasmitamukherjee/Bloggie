@@ -4,32 +4,24 @@ import {
   FaThumbsUp,
   FaThumbsDown,
   FaEye,
-  FaEdit,
-  FaTrashAlt,
   FaComment,
 } from "react-icons/fa";
 import { useParams } from "react-router-dom";
-import {RiUserUnfollowFill,RiUserFollowLine} from "react-icons/ri"
+import { RiUserUnfollowFill, RiUserFollowLine } from "react-icons/ri";
 import * as Yup from "yup";
 import {
   dislikePostAPI,
   fetchPost,
   likePostAPI,
 } from "../../APIServices/posts/postsAPI";
-// import { RiUserUnfollowFill, RiUserFollowLine } from "react-icons/ri";
-// import {
-//   followUserAPI,
-//   unfollowUserAPI,
-//   userProfileAPI,
-// } from "../../APIServices/users/usersAPI";
-// import { createCommentAPI } from "../../APIServices/comments/commentsAPI";
 import { useFormik } from "formik";
 import { followUserAPI, unfollowUserAPI, userProfileAPI } from "../../APIServices/users/usersAPI";
+import { createCommentAPI } from "../../APIServices/comments/commentsAPI";
+
 const PostDetails = () => {
   const [comment, setComment] = useState("");
-  // !Get the post id
   const { postId } = useParams();
-  // ! use query
+
   const {
     isError,
     isLoading,
@@ -40,89 +32,94 @@ const PostDetails = () => {
     queryKey: ["post-details"],
     queryFn: () => fetchPost(postId),
   });
-//profile
-  const {data : profileData,refetch:refetchProfile} = useQuery({
+
+  const { data: profileData, refetch: refetchProfile } = useQuery({
     queryKey: ["profile-details"],
     queryFn: () => userProfileAPI(),
   });
+
   const formik = useFormik({
-   // initial data
-   initialValues: {
-     content: "",
-   },
-   // validation
-   validationSchema: Yup.object({
-     content: Yup.string().required("Comment content is required"),
-   }),
-   // submit
-   onSubmit: (values) => {
-     const data = {
-       content: values.content,
-       postId,
-     };
-     commentMutation
-       .mutateAsync(data)
-       .then(() => {
-         refetchPost();
-       })
-       .catch((e) => console.log(e));
-   },
- });
+    initialValues: {
+      content: "",
+    },
+    validationSchema: Yup.object({
+      content: Yup.string().required("Comment content is required"),
+    }),
+    onSubmit: (values) => {
+      const data = {
+        content: values.content,
+        postId,
+      };
+      commentMutation.mutateAsync(data)
+        .then(() => {
+          refetchPost();
+        })
+        .catch((e) => console.log(e));
+    },
+  });
 
- const followUserMutation = useMutation({
-  mutationKey:["follow"],
-  mutationFn:followUserAPI
-})
-const unfollowUserMutation = useMutation({
-  mutationKey:["unfollow"],
-  mutationFn:unfollowUserAPI
-})
-const userId=profileData?.user?._id
- const targetId= data?.postFound?.author;
+  const followUserMutation = useMutation({
+    mutationKey: ["follow"],
+    mutationFn: followUserAPI,
+  });
 
- const likesMutation = useMutation({
-  mutationKey:["likes"],
-  mutationFn:likePostAPI
-})
-const dislikesMutation = useMutation({
-  mutationKey:["dislikes"],
-  mutationFn:dislikePostAPI
-})
+  const unfollowUserMutation = useMutation({
+    mutationKey: ["unfollow"],
+    mutationFn: unfollowUserAPI,
+  });
 
+  const userId = profileData?.user?._id;
+  const targetId = data?.postFound?.author;
 
-const followUserHandler=async ()=>{
-  followUserMutation.mutateAsync(targetId).then(()=>{
-    refetchProfile()
-  }).catch(e=>console.log(e))
+  const likesMutation = useMutation({
+    mutationKey: ["likes"],
+    mutationFn: likePostAPI,
+  });
 
-}
+  const dislikesMutation = useMutation({
+    mutationKey: ["dislikes"],
+    mutationFn: dislikePostAPI,
+  });
 
+  const followUserHandler = async () => {
+    if (targetId) {
+      followUserMutation.mutateAsync(targetId).then(() => {
+        refetchProfile();
+      }).catch(e => console.log(e));
+    }
+  };
 
-const unfollowUserHandler=async ()=>{
-  unfollowUserMutation.mutateAsync(targetId).then(()=>{
-    refetchProfile()
-  }).catch(e=>console.log(e))
+  const unfollowUserHandler = async () => {
+    if (targetId) {
+      unfollowUserMutation.mutateAsync(targetId).then(() => {
+        refetchProfile();
+      }).catch(e => console.log(e));
+    }
+  };
 
-}
+  const likePostHandler = async () => {
+    if (postId) {
+      likesMutation.mutateAsync(postId).then(() => {
+        refetchPost();
+      }).catch(e => console.log(e));
+    }
+  };
 
+  const dislikePostHandler = async () => {
+    if (postId) {
+      dislikesMutation.mutateAsync(postId).then(() => {
+        refetchPost();
+      }).catch(e => console.log(e));
+    }
+  };
 
+  const commentMutation = useMutation({
+    mutationKey: "create-comment",
+    mutationFn: createCommentAPI,
+  });
 
-const likePostHandler=async ()=>{
-  likesMutation.mutateAsync(postId).then(()=>{
-    refetchPost()
-  }).catch(e=>console.log(e))
+  const isFollowing = profileData?.user?.following?.find((user) => user?._id?.toString() === targetId?.toString());
 
-}
-
-
-const dislikePostHandler=async ()=>{
-  dislikesMutation.mutateAsync(postId).then(()=>{
-refetchPost();
-  }).catch(e=>console.log(e))
-
-}
-
- const isFollowing=profileData?.user?.following?.find((user)=>user?.toString()===targetId.toString())
   return (
     <div className="container mx-auto p-4">
       <div className="bg-white rounded-lg shadow-lg p-5">
@@ -131,10 +128,8 @@ refetchPost();
           alt={data?.postFound?.description}
           className="w-full h-full object-cover rounded-lg mb-4"
         />
-        {/* Show messages */}
 
         <div className="flex gap-4 items-center mb-4">
-          {/* like icon */}
           <span
             className="flex items-center gap-1 cursor-pointer"
             onClick={likePostHandler}
@@ -143,24 +138,20 @@ refetchPost();
             {data?.postFound?.likes?.length || 0}
           </span>
 
-          {/* Dislike icon */}
           <span
             className="flex items-center gap-1 cursor-pointer"
             onClick={dislikePostHandler}
           >
             <FaThumbsDown />
-
             {data?.postFound?.dislikes?.length || 0}
           </span>
-          {/* views icon */}
+
           <span className="flex items-center gap-1">
             <FaEye />
             {data?.postFound?.viewers?.length || 0}
           </span>
         </div>
-        
 
-        {/* follow icon */}
         {isFollowing ? (
           <button
             onClick={unfollowUserHandler}
@@ -179,24 +170,15 @@ refetchPost();
           </button>
         )}
 
-        {/* author */}
-        <span className="ml-2">{/* {postData?.author?.username} */}</span>
+        <span className="ml-2">{/* {data?.postFound?.author?.username} */}</span>
 
-        {/* post details */}
         <div className="flex justify-between items-center mb-3">
           <div
             className="rendered-html-content mb-2"
             dangerouslySetInnerHTML={{ __html: data?.postFound?.description }}
           />
-
-          {/* Edit delete icon */}
-          <div className="flex gap-2">
-            <FaEdit className="text-blue-500 cursor-pointer" />
-            <FaTrashAlt className="text-red-500 cursor-pointer" />
-          </div>
         </div>
 
-        {/* Comment Form */}
         <form onSubmit={formik.handleSubmit}>
           <textarea
             className="w-full border border-gray-300 p-2 rounded-lg mb-2"
@@ -205,7 +187,6 @@ refetchPost();
             value={comment}
             {...formik.getFieldProps("content")}
           ></textarea>
-          {/* comment error */}
           {formik.touched.content && formik.errors.content && (
             <div className="text-red-500 mb-4 mt-1">
               {formik.errors.content}
@@ -218,14 +199,14 @@ refetchPost();
             <FaComment className="inline mr-1" /> Comment
           </button>
         </form>
-        {/* Comments List */}
+
         <div>
           <h2 className="text-xl font-bold mb-2">Comments:</h2>
           {data?.postFound?.comments?.map((comment, index) => (
             <div key={index} className="border-b border-gray-300 mb-2 pb-2">
               <p className="text-gray-800">{comment.content}</p>
               <span className="text-gray-600 text-sm">
-                - {comment.author?.username}
+                - {comment?.author?.username}
               </span>
               <small className="text-gray-600 text-sm ml-2">
                 {new Date(comment.createdAt).toLocaleDateString()}
