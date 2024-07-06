@@ -30,6 +30,9 @@ import MyFollowing from './components/User/MyFollowing';
 import MyFollowers from './components/User/MyFollowers';
 import MyEarnings from './components/User/MyEarnings';
 import DashboardPosts from './components/User/DashboardPosts';
+import Settings from './components/User/Settings';
+import AddEmailComponent from './components/User/UpdateEmail';
+import UploadProfilePic from './components/User/UpdateProfilePicture';
 
 function App() {
   const {isError, isLoading, data, error, refetch} = useQuery({
@@ -84,7 +87,9 @@ const {userAuth}=useSelector((state)=>state.auth)
         <Route element={<AuthRoute>
           <CreatePlan/>
         </AuthRoute>} path="create-plan"/>
-
+        <Route element={<AuthRoute>
+          <Settings/>
+        </AuthRoute>} path="settings"/>
         
         <Route element={<AuthRoute>
           <Notifications/>
@@ -93,6 +98,15 @@ const {userAuth}=useSelector((state)=>state.auth)
         <Route element={<AuthRoute>
           <MyEarnings/>
         </AuthRoute>} path="my-earnings"/>
+
+
+        <Route element={<AuthRoute>
+          <AddEmailComponent/>
+        </AuthRoute>} path="add-email"/>
+        
+        <Route element={<AuthRoute>
+          <UploadProfilePic/>
+        </AuthRoute>} path="upload-profile-photo"/>
 
         <Route element={<AuthRoute>
           <DashboardPosts/>

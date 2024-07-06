@@ -126,3 +126,31 @@ export const verifyUserAccountAPI = async (verifyToken) => {
 
   return response.data;
 };
+
+// ! updateEmailAPI
+export const updateEmailAPI = async (email) => {
+  const response = await axios.put(
+    `${BASE_URL}/users/update-email`,
+    {
+      email,
+    },
+    {
+      withCredentials: true,
+    }
+  );
+
+  return response.data;
+};
+
+// !upload profile pic
+export const uplaodProfilePicAPI = async (formData) => {
+  const response = await axios.put(
+    `${BASE_URL}/users/upload-profile-picture`,
+    formData,
+    {
+      withCredentials: true,
+    }
+  );
+
+  return response.data;
+};

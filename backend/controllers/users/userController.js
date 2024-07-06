@@ -211,6 +211,41 @@ if(!user){
     await userFound.save();
     res.json({ message: "Account successfully verified" });
   }),
+  // update email
+  updateEmail: asyncHandler(async (req, res) => {
+    //email
+    const { email } = req.body;
+    //Find the user
+    const user = await User.findById(req.user);
+    //update the user email
+    user.email = email;
+    user.isEmailVerified = false;
+    //save the user
+    await user.save();
+    //use the method from the model
+    const token = await user.generateAccVerificationToken();
+    //send the verification email
+    sendAccVerificationEmail(user?.email, token);
+    //send the response
+    res.json({
+      message: `Account verification email sent to ${user?.email} token expires in 10 minutes`,
+    });
+  }),
+  //! Update profile picture
+  updateProfilePic: asyncHandler(async (req, res) => {
+    //Find the user
+    await User.findByIdAndUpdate(
+      req.user,
+      {
+        $set: { profilePicture: req.file },
+      },
+      { new: true }
+    );
+    //send the response
+    res.json({
+      message: "Profile picture updated successfully",
+    });
+  }),
 
 }
 
