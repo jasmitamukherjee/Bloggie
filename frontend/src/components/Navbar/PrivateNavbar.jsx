@@ -1,41 +1,50 @@
-import { Fragment, useEffect } from "react";
+import { Fragment } from "react";
 import { Disclosure, Menu, Transition } from "@headlessui/react";
 import { Bars3Icon, BellIcon, XMarkIcon } from "@heroicons/react/24/outline";
-import { PlusIcon } from "@heroicons/react/20/solid";
 import { Link, useNavigate } from "react-router-dom";
 
 import { MdOutlineDashboard } from "react-icons/md";
 import { IoLogOutOutline } from "react-icons/io5";
-import { useMutation } from "@tanstack/react-query";
-import { logoutAPI } from "../../APIServices/users/usersAPI";
+import { useMutation, useQuery } from "@tanstack/react-query";
+import { logoutAPI, userProfileAPI } from "../../APIServices/users/usersAPI";
 import { useDispatch } from "react-redux";
 import { logout } from "../../redux/slices/authSlices";
 import NotificationCounts from "../Notification/NotificationCounts";
-
+import Avatar from "../User/Avatar";
 function classNames(...classes) {
   return classes.filter(Boolean).join(" ");
 }
 
+
 export default function PrivateNavbar() {
   // dispatch hook
   const dispatch = useDispatch();
+  const navigate = useNavigate();
+  const { data, isLoading, isError, error } = useQuery({
+    queryKey: ["profile"],
+    queryFn: userProfileAPI,
+  });
   // user mutation
   const logoutMutation = useMutation({
     mutationKey: ["logout"],
     mutationFn: logoutAPI,
   });
-  //logout handler
+
+  // logout handler
   const logoutHandler = async () => {
     logoutMutation
       .mutateAsync()
       .then(() => {
-        //dispatch action to logout
+        // dispatch action to logout
         dispatch(logout(null));
+        // navigate to login page
+        navigate("/login");
       })
       .catch((e) => console.log(e));
   };
+
   return (
-    <Disclosure as="nav" className="bg-white ">
+    <Disclosure as="nav" className="bg-white">
       {({ open }) => (
         <>
           <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
@@ -94,8 +103,7 @@ export default function PrivateNavbar() {
                     </button>
                   </Link>
                   {/* Notification */}
-
-                <NotificationCounts/>
+                  <NotificationCounts />
                 </div>
                 <div className="hidden md:ml-1 md:flex md:flex-shrink-0 md:items-center">
                   {/* Profile dropdown */}
@@ -105,15 +113,15 @@ export default function PrivateNavbar() {
                         <span className="absolute -inset-1.5" />
                         <span className="sr-only">Open user menu</span>
                         {/* Profile Image */}
-                        {/* {data?.user?.profilePicture ? (
+                        {data?.user?.profilePicture ? (
                           <img
                             className="h-10 w-10 rounded-full"
                             src={data?.user?.profilePicture}
-                            alt="profile"
+                            alt="pic"
                           />
                         ) : (
                           <Avatar />
-                        )} */}
+                        )}
                       </Menu.Button>
                     </div>
                     <Transition
@@ -159,7 +167,7 @@ export default function PrivateNavbar() {
               </div>
             </div>
           </div>
-          {/* Mobile Navs  private links*/}
+          {/* Mobile Navs private links */}
           <Disclosure.Panel className="md:hidden">
             <div className="space-y-1 pb-3 pt-2">
               <Link to="/">
@@ -206,7 +214,7 @@ export default function PrivateNavbar() {
                     />
                   </span>
                   {/* Profile Image */}
-                  {/* {data?.user?.profilePicture ? (
+                  {data?.user?.profilePicture ? (
                     <img
                       className="h-10 w-10 rounded-full"
                       src={data?.user?.profilePicture}
@@ -214,14 +222,14 @@ export default function PrivateNavbar() {
                     />
                   ) : (
                     <Avatar />
-                  )} */}
+                  )}
                 </div>
                 <div className="ml-3">
                   <div className="text-base font-medium text-gray-800">
-                    {/* {localStorage.getItem("username")} */}
+                    {localStorage.getItem("username")}
                   </div>
                   <div className="text-sm font-medium text-gray-500">
-                    {/* {data?.user?.username} */}
+                    {data?.user?.username}
                   </div>
                 </div>
               </div>
@@ -236,7 +244,7 @@ export default function PrivateNavbar() {
                 </Link>
                 <Disclosure.Button
                   as="button"
-                  // onClick={logoutHandler}
+                  onClick={logoutHandler}
                   className="block px-4 py-2 text-base font-medium text-gray-500 hover:bg-gray-100 hover:text-gray-800 sm:px-6"
                 >
                   Sign out
