@@ -1,3 +1,4 @@
+import { useMutation, useQuery } from "@tanstack/react-query";
 import React from "react";
 import {
   FaEye,
@@ -6,38 +7,33 @@ import {
   FaThumbsUp,
   FaThumbsDown,
   FaFlag,
+  FaCommentDots,
 } from "react-icons/fa";
+
 import { Link } from "react-router-dom";
-import { useMutation, useQuery } from "@tanstack/react-query";
-import { sendEmailVerificatonTokenAPI, userProfileAPI } from "../../APIServices/users/usersAPI";
+
 import AlertMessage from "../Alert/AlertMessage";
+import { sendEmailVerificatonTokenAPI, userProfileAPI } from "../../APIServices/users/usersAPI";
+import { getMyEarningsAPI } from "../../APIServices/earnings/earningsAPI";
 
 const AccountSummaryDashboard = () => {
-  const {data,isLoading,isError,isSuccess,error}=useQuery({
-    queryKey:["profile"],
-    queryFn:userProfileAPI
-  })
-const verificationTokenMutation = useMutation({
-  mutationKey:["send-email-verificatiom-token"],
-mutationFn:sendEmailVerificatonTokenAPI})
-
-const handleSendVerificationEmail=()=>{
-verificationTokenMutation.mutate();
-}
-
+  const { data, isLoading, isError, error } = useQuery({
+    queryKey: ["profile"],
+    queryFn: userProfileAPI,
+  });
   //check if user has email
 
   const hasEmail = data?.user?.email;
-
- //check if user has plan
+  console.log(data);
+  //check if user has plan
 
   const hasPlan = data?.user?.hasSelectedPlan;
 
   //check if user has verified account
-  const isEmailVerified =  data?.user?.isEmailVerified;
+  const isEmailVerified = data?.user?.isEmailVerified;
 
   //total followers
-  const totalFollowers =  data?.user?.followers?.length;
+  const totalFollowers = data?.user?.followers?.length;
 
   //total following
   const totalFollowing = data?.user?.following?.length;
@@ -45,27 +41,33 @@ verificationTokenMutation.mutate();
   //get user posts
 
   const userPosts = data?.user?.posts?.length;
+
   //there is a view count in the post object so calculate the total views
 
-  const totalViews = 0;
+  //initial counters
 
-  //calculate total likes but likes is an array
+  let totalViews = 0;
+  let totalLikes = 0;
+  let totalComments = 0;
+  let totalDislikes = 0;
 
-  const totalLikes = 0;
+  //loop through the users posts to update the initial counters
 
-  //total posts
+  data?.user?.posts?.forEach((post) => {
+    totalViews += post.viewers.length;
+    totalLikes += post.likes.length;
+    totalDislikes += post.dislikes.length;
+    totalComments += post.comments.length;
+  });
 
-  //calculate total comments
+  const { data: earnings } = useQuery({
+    queryKey: ["my-earnings"],
+    queryFn: getMyEarningsAPI,
+  });
 
-  const totalComments = 0;
-
-  //calculate total dislikes
-
-  const totalDislikes = 0;
-
-  //total earnings
-
-  const totalEarnings = 0;
+  //Calc total amount
+  const totalEarnings = earnings?.reduce((acc, curr) => acc + curr.amount, 0);
+  console.log(totalEarnings);
   const stats = [
     {
       icon: <FaEye />,
@@ -106,17 +108,26 @@ verificationTokenMutation.mutate();
     {
       icon: <FaFlag />,
       label: "Posts",
-      value: userPosts?.length || 0,
+      value: userPosts || 0,
       bgColor: "bg-pink-500",
     },
     {
-      icon: <FaUsers />,
-      label: "Ranking",
-      value: "1st",
+      icon: <FaCommentDots />,
+      label: "Comments",
+      value: totalComments,
       bgColor: "bg-teal-500",
     },
   ];
-
+  //! Sending email verification token mutation
+  const verificationTokenMutation = useMutation({
+    mutationKey: ["send-email-verification-token"],
+    mutationFn: sendEmailVerificatonTokenAPI,
+  });
+  //handleSendVerificationEmail
+  const handleSendVerificationEmail = async () => {
+    verificationTokenMutation.mutate();
+  };
+  console.log(verificationTokenMutation);
   return (
     <div className="p-4">
       <p
@@ -128,16 +139,20 @@ verificationTokenMutation.mutate();
       </p>
       {/* display account verification status */}
       {verificationTokenMutation.isPending ? (
-        <AlertMessage type="loading" message="Sending email..." />
+        <AlertMessage type="loading" message="Email sending loading..." />
       ) : verificationTokenMutation.isError ? (
         <AlertMessage
           type="error"
           message={
-            verificationTokenMutation?.error?.message || verificationTokenMutation?.error?.response?.data?.message
+            verificationTokenMutation?.error?.message ||
+            verificationTokenMutation?.error?.response?.data?.message
           }
         />
       ) : verificationTokenMutation.isSuccess ? (
-        <AlertMessage type="success" message={verificationTokenMutation?.data?.message} />
+        <AlertMessage
+          type="success"
+          message={verificationTokenMutation?.data?.message}
+        />
       ) : null}
       {!hasPlan && (
         <div
