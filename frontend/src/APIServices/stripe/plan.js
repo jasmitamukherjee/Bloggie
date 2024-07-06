@@ -1,6 +1,6 @@
 import axios from "axios";
 //create that must return a promise
-const BASE_URL = "https://bloggie-back-1.onrender.com/api/v1/stripe";
+const BASE_URL = "https://backend-bloggie.onrender.com/api/v1/stripe";
 
 //!Create post api
 export const paymentIntentAPI = async (planId) => {

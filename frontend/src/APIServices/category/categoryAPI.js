@@ -1,6 +1,6 @@
 import axios from "axios";
 //create that must return a promise
-const BASE_URL = "https://bloggie-back-1.onrender.com/api/v1/categories";
+const BASE_URL = "https://backend-bloggie.onrender.com/api/v1/categories";
 
 //!Create category apis
 export const addCategoryAPI = async (postData) => {

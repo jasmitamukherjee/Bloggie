@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const BASE_URL = "https://bloggie-back-1.onrender.com/api/v1/notifications";
+const BASE_URL = "https://backend-bloggie.onrender.com/api/v1/notifications";
 
 // Fetch all notifications
 export const fetchNotificationsAPI = async () => {
