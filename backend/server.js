@@ -19,7 +19,7 @@ const notificationRouter = require("./routers/notification/notificationRouter");
 const commentRouter = require("./routers/comments/commentsRouter");
 
 connectDB();
-// calculateEarnings();
+// dont calculateEarnings();
 cron.schedule("59 23 * * *",async()=>{
     const today=new Date();
 const tomorrow = new Date(today);
