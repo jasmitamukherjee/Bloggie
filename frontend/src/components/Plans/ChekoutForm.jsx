@@ -56,7 +56,7 @@ const CheckoutForm = () => {
         elements,
         clientSecret,
         confirmParams: {
-          return_url: "https://bloggie-iwa0.onrender.com/success",
+          return_url: `${process.env.REACT_BASE_URL}/success`,
         },
       });
 
