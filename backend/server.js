@@ -40,7 +40,10 @@ app.use(express.json())
 const corsOptions = {
     origin:process.env.BASE_URL || "https://bloggie-iwa0.onrender.com",
     
-    credentials:true
+    credentials:true,
+    allowedHeaders: ["Content-Type", "Authorization"],
+    exposedHeaders: ["set-cookie"],
+    methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
 }
 app.use(cors(corsOptions))
 
