@@ -8,9 +8,9 @@ const isAuthenticated = (req, res, next) => {
         error: error ? error?.message : undefined,
       });
     }
-    //place the user in the req obj
+    // Place the user in the req object
     req.user = user?._id;
-    //call next
+    // Call next
     return next();
   })(req, res, next);
 };

@@ -42,50 +42,53 @@ const stripePaymentController = {
           res.json({ error });
         }
       }),
-    //verigy
-    verify: asyncHandler(async (req, res) => {
-      //! Get the paymentId
-      const { paymentId } = req.params;
-      const paymentIntent = await stripe.paymentIntents.retrieve(paymentId);
-      // ! confirm the payment status
-      if (paymentIntent.status !== "success") {
-        //!get the data from the metadata
-        const metadata = paymentIntent?.metadata;
-        const subscriptionPlanId = metadata?.subscriptionPlanId;
-        const userId = metadata.userId;
-        //! Find the user
-        const userFound = await User.findById(userId);
-        if (!userFound) {
-          return res.json({ message: "User not found" });
-        }
-        //! Get the payment details
-        const amount = paymentIntent?.amount / 10;
-        const currency = paymentIntent?.currency;
-        // ! Create payment History
-        const newPayment = await Payment.create({
-          user: userId,
-          subscriptionPlan: subscriptionPlanId,
-          status: "success",
-          amount,
-          currency,
-          reference: paymentId,
-        });
-  
-        if (newPayment) {
-          //!  Update the user profile
-          userFound.hasSelectedPlan = true;
-          userFound.plan = subscriptionPlanId;
-          //resave
-          await userFound.save();
-        }
-        //! Send the response
-        res.json({
-          status: true,
-          message: "Payment has been verified and User is updated",
-          userFound,
-        });
-      }
-    }),
+   //verigy
+verify: asyncHandler(async (req, res) => {
+  try {
+    const { paymentId } = req.params;
+    const paymentIntent = await stripe.paymentIntents.retrieve(paymentId);
+
+    if (paymentIntent.status !== "succeeded") {
+      return res.status(400).json({ message: "Payment not succeeded" });
+    }
+
+    const metadata = paymentIntent.metadata;
+    const subscriptionPlanId = metadata?.subscriptionPlanId;
+    const userId = metadata.userId;
+
+    const userFound = await User.findById(userId);
+    if (!userFound) {
+      return res.status(404).json({ message: "User not found" });
+    }
+
+    const amount = paymentIntent.amount / 10;
+    const currency = paymentIntent.currency;
+
+    const newPayment = await Payment.create({
+      user: userId,
+      subscriptionPlan: subscriptionPlanId,
+      status: "success",
+      amount,
+      currency,
+      reference: paymentId,
+    });
+
+    if (newPayment) {
+      userFound.hasSelectedPlan = true;
+      userFound.plan = subscriptionPlanId;
+      await userFound.save();
+    }
+
+    res.json({
+      status: true,
+      message: "Payment has been verified and User is updated",
+      userFound,
+    });
+  } catch (error) {
+    res.status(500).json({ message: "Internal server error", error: error.message });
+  }
+}),
+
     //Free plan
     free: asyncHandler(async (req, res) => {
       //check for the user
