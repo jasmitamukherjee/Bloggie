@@ -12,14 +12,14 @@ const PayingPremiumPlan = () => {
         <p className="mt-2 text-center text-gray-500">
           Proceed to make your payment for the premium plan.
         </p>
-        {/* <Link to={`/checkout/${premiumPlan?.[0]?._id}`}>
+        <Link to={`/checkout/${premiumPlan?.[0]?._id}`}>
           <button
             className="mt-8 w-full py-2 px-4 bg-orange-500 text-white rounded
             hover:bg-orange-600 focus:outline-none"
           >
             Continue to Pay
           </button>
-        </Link> */}
+        </Link>
       </div>
     </div>
   );

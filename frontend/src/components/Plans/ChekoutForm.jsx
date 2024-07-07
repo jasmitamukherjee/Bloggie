@@ -56,7 +56,7 @@ const CheckoutForm = () => {
         elements,
         clientSecret,
         confirmParams: {
-          return_url: `${process.env.REACT_BASE_URL}/success`,
+          return_url: "https://backend-bloggie.onrender.com/api/v1/stripe/success",
         },
       });
 
