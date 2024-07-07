@@ -56,9 +56,9 @@ const CheckoutForm = () => {
         elements,
         clientSecret,
         confirmParams: {
-          return_url: "https://backend-bloggie.onrender.com/api/v1/stripe/success",
+          return_url: "https://bloggie-iwa0.onrender.com/success",
         },
-      });
+      });s
 
       if (error) {
         setErrorMessage(error.message);

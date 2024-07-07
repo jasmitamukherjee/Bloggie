@@ -42,7 +42,7 @@ const corsOptions = {
     
     credentials:true,
     allowedHeaders: ["Content-Type", "Authorization"],
-    exposedHeaders: ["set-cookie"],
+    // exposedHeaders: ["set-cookie"],
     methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
 }
 app.use(cors(corsOptions))
