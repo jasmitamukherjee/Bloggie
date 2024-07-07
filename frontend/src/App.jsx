@@ -20,7 +20,6 @@ import AccountSummaryDashboard from './components/User/AccountSummaryDashboard';
 import AddCategory from './components/Category/AddCategory';
 import CreatePlan from './components/Plans/CreatePlan';
 import Pricing from './components/Plans/Pricing';
-import CheckoutForm from './components/Plans/CheckoutForm';
 import PaymentSuccess from './components/Plans/PaymentSuccess';
 import PayingFreePlan from './components/Plans/PayingFreePlan';
 import AccountVerifiedComponent from './components/User/AccountVerification';
@@ -33,6 +32,7 @@ import DashboardPosts from './components/User/DashboardPosts';
 import Settings from './components/User/Settings';
 import AddEmailComponent from './components/User/UpdateEmail';
 import UploadProfilePic from './components/User/UpdateProfilePicture';
+import CheckoutForm from './components/Plans/ChekoutForm';
 
 function App() {
   const dispatch = useDispatch();
