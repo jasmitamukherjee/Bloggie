@@ -56,7 +56,7 @@ const CheckoutForm = () => {
         elements,
         clientSecret,
         confirmParams: {
-          return_url: "http://localhost:5173/success",
+          return_url: "https://bloggie-iwa0.onrender.com/success",
         },
       });
 
