@@ -35,34 +35,18 @@ import UploadProfilePic from './components/User/UpdateProfilePicture';
 import CheckoutForm from './components/Plans/ChekoutForm';
 
 function App() {
-  const dispatch = useDispatch();
-  const { userAuth } = useSelector((state) => state.auth);
-
-  const { isLoading, isError, data, error, refetch } = useQuery({
-    queryKey: ['user-auth'],
+  const { isError, isLoading, data, error, isSuccess, refetch } = useQuery({
+    queryKey: ["user-auth"],
     queryFn: checkAuthStatusAPI,
-    onSuccess: (data) => {
-      dispatch(isAuthenticated(data));
-    },
-    onError: (error) => {
-      dispatch(isAuthenticated(null));
-    },
   });
 
+  //dispatch
+  const dispatch = useDispatch();
   useEffect(() => {
-    if (data) {
-      dispatch(isAuthenticated(data));
-    }
-  }, [data, dispatch]);
-
-  if (isLoading) {
-    return <div>Loading...</div>;
-  }
-
-  if (isError) {
-    return <div>Error: {error.message}</div>;
-  }
-
+    dispatch(isAuthenticated(data));
+  }, [data]);
+  //Get the login user from store
+  const { userAuth } = useSelector((state) => state.auth);
   return (
     <BrowserRouter>
       {userAuth ? <PrivateNavbar /> : <PublicNavbar />}
